@@ -1,6 +1,7 @@
 package com.courseoutlinemanager.assessment;
 
 public enum AssessmentTypes {
+	NULL,
 
 	FORMATIVE,
 

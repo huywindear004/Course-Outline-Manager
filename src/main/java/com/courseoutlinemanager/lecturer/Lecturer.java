@@ -1,10 +1,10 @@
 package com.courseoutlinemanager.lecturer;
 
+import com.courseoutlinemanager.common.ProcessString;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
+import com.courseoutlinemanager.common.customexception.*;
 
 import java.util.ArrayList;
-
-
 
 public class Lecturer {
 
@@ -14,26 +14,59 @@ public class Lecturer {
 
 	private String lecturerId;
 
-	private ArrayList<CourseOutline> courseOutlines;
+	private ArrayList<CourseOutline> courseOutlines = new ArrayList<>();
+
+	public Lecturer(String name, String id) {
+		this.lecturerName = name;
+		this.lecturerId = id;
+	}
 
 	public String getName() {
-		return null;
+		return this.lecturerName;
 	}
 
 	public String getId() {
-		return null;
+		return this.lecturerId;
 	}
 
-	public ArrayList<CourseOutline> getCourseOutlines() {
-		return null;
+	public void addCourseOutline(CourseOutline outline) throws OutOfCapacityException, AlreadyExistException {
+		if (!this.hasEnoughCourseOutlines())
+			throw new OutOfCapacityException();
+		if (this.contains(outline))
+			throw new AlreadyExistException();
+		this.courseOutlines.add(outline);
+	}
+
+	public void removeCourseOutline(CourseOutline outline) {
+		this.courseOutlines.remove(outline);
+	}
+
+	public void removeCourseOutline(String outlineName) {
+		this.courseOutlines.removeIf(outline -> ProcessString.compare(outlineName, outline.toString()));
+	}
+
+	public boolean contains(CourseOutline outline) {
+		if (this.courseOutlines.contains(outline))
+			return true;
+		return false;
+	}
+
+	public boolean contains(String outlineName, String courseId) {
+		for (CourseOutline outline : this.courseOutlines)
+			if (ProcessString.compare(outline.getCourse().getCourseName(), outlineName)
+					&& ProcessString.compare(outline.getCourse().getCourseCode(), courseId))
+				return true;
+		return false;
 	}
 
 	public int getCourseOutlinesNum() {
-		return 0;
+		return this.courseOutlines.size();
 	}
 
 	public boolean hasEnoughCourseOutlines() {
-		return false;
+		if (this.getCourseOutlinesNum() <= MAX_COURSEOUTLINES)
+			return false;
+		return true;
 	}
 
 }

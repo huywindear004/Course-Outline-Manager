@@ -1,6 +1,7 @@
 package com.courseoutlinemanager.assessment;
 
 public enum AssessmentMethods {
+	NULL,
 
 	ATTENDANCE,
 
