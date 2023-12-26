@@ -15,7 +15,7 @@ public class Assessment {
 	}
 
 	public Assessment(String type, String method, double weight, String content) {
-		
+
 	}
 
 	public double getWeight() {
@@ -44,7 +44,6 @@ public class Assessment {
 
 	public void setAssessingType(String type) {
 		for (AssessmentTypes i : AssessmentTypes.values()) {
-			if(String.) {
 		}
 	}
 

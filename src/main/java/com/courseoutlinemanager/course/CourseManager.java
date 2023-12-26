@@ -1,4 +1,4 @@
-package com.courseoutlinemanager;
+package com.courseoutlinemanager.course;
 
 public class CourseManager {
 

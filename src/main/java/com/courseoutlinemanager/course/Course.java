@@ -1,7 +1,8 @@
 package com.courseoutlinemanager.course;
 
-import com.courseoutlinemanager.CourseOutline;
+
 import com.courseoutlinemanager.course.knowledgeblock.*;
+import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.educationalsystem.*;
 
 import java.util.ArrayList;
