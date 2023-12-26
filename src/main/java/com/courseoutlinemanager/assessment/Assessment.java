@@ -1,7 +1,7 @@
 package com.courseoutlinemanager.assessment;
 
 public class Assessment {
-
+	
 	private double weight;
 
 	private String content;
@@ -11,13 +11,14 @@ public class Assessment {
 	private AssessmentMethods assessingMethod;
 
 	public Assessment(String type, String method, double weight) {
-
+		
 	}
 
 	public Assessment(String type, String method, double weight, String content) {
 
 	}
-
+	
+	
 	public double getWeight() {
 		return 0;
 	}
