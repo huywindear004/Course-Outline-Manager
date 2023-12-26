@@ -1,8 +1,10 @@
 package com.courseoutlinemanager.lecturer;
 
+import com.courseoutlinemanager.courseoutline.CourseOutline;
+
 import java.util.ArrayList;
 
-import com.courseoutlinemanager.courseoutline.CourseOutline;
+
 
 public class Lecturer {
 

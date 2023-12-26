@@ -1,4 +1,4 @@
-package com.courseoutlinemanager.course;
+package com.courseoutlinemanager.course.knowledgeblock;
 
 import java.util.ArrayList;
 import com.courseoutlinemanager.course.knowledgeblock.*;

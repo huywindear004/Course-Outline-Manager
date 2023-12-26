@@ -1,8 +1,10 @@
 package com.courseoutlinemanager.course;
 
+import com.courseoutlinemanager.course.coursecondition.CourseCondition;
+import com.courseoutlinemanager.courseoutline.CourseOutline;
 
 import com.courseoutlinemanager.course.knowledgeblock.*;
-import com.courseoutlinemanager.courseoutline.CourseOutline;
+
 import com.courseoutlinemanager.educationalsystem.*;
 
 import java.util.ArrayList;
@@ -26,6 +28,5 @@ public class Course {
 
 	private ArrayList<CourseOutline> courseOutlines;
 
-	private HashMap<String, ArrayList<Course>> requiredCourses;
-
+	private ArrayList<CourseCondition> requirements;
 }

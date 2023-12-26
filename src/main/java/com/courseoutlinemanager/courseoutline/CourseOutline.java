@@ -1,5 +1,6 @@
 package com.courseoutlinemanager.courseoutline;
 
+import com.courseoutlinemanager.lecturer.Lecturer;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.lecturer.Lecturer;
 import com.courseoutlinemanager.assessment.*;
