@@ -15,7 +15,7 @@ public enum AssessmentMethods {
 	PROJECT;
 
 	public String toString() {
-		return null;
+		return super.toString().replaceAll("_", " ");
 	}
 
 }
