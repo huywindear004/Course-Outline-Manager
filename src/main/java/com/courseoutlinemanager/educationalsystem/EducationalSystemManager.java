@@ -1,4 +1,4 @@
-package com.courseoutlinemanager;
+package com.courseoutlinemanager.educationalsystem;
 
 public class EducationalSystemManager {
 
