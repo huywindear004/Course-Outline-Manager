@@ -8,6 +8,10 @@ public class KnowledgeBlockManager {
 
 	private ArrayList<KnowledgeBlock> knowledgeBlockList;
 
+	public KnowledgeBlockManager() {
+		this.knowledgeBlockList = new ArrayList<>();
+	}
+
 	public KnowledgeBlockManager(ArrayList<KnowledgeBlock> knowledgeBlockList) {
 		this.knowledgeBlockList = knowledgeBlockList;
 	}
@@ -23,5 +27,5 @@ public class KnowledgeBlockManager {
 	public void removeKnowledgeBlock(String name) {
 		this.knowledgeBlockList.removeIf(knowledgeBlock -> ProcessString.compare(name, knowledgeBlock.toString()));
 	}
-
+	
 }

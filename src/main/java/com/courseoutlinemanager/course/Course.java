@@ -1,15 +1,18 @@
 package com.courseoutlinemanager.course;
 
+import com.courseoutlinemanager.common.ProcessString;
+import com.courseoutlinemanager.common.customexception.AlreadyExistException;
+import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.course.knowledgeblock.*;
 import com.courseoutlinemanager.educationalsystem.*;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Course {
 
-	private static final int MAX_REQUIRED_COURSES = 3;
 	private String courseCode;
 
 	private String courseName;
@@ -27,6 +30,14 @@ public class Course {
 	private ArrayList<CourseCondition> requirements;
 
 	public Course() {
+		this.educationalSystem = new ArrayList<>();
+		this.courseOutlines = new ArrayList<>();
+		this.requirements = new ArrayList<>();
+	}
+
+	public Course(String courseCode, String courseName) {
+		this.courseCode = courseCode;
+		this.courseName = courseName;
 	}
 
 	public Course(String courseCode, String courseName, String courseDescription, int courseCredits) {
@@ -105,16 +116,61 @@ public class Course {
 		this.courseOutlines = courseOutlines;
 	}
 
+	// =============================================================REQUIREMENTS=============================================================
 	public ArrayList<CourseCondition> getRequirements() {
 		return requirements;
+	}
+
+	/**
+	 * Return the required course list
+	 */
+	public ArrayList<CourseCondition> getRequirements(String typeOfRequiredCourse) {
+		return new ArrayList<CourseCondition>(this.requirements.stream()
+				.filter(course -> ProcessString.compare(course.getTypeName(), typeOfRequiredCourse))
+				.collect(Collectors.toList()));
+	}
+
+	/**
+	 * Return the size of the requirement types
+	 */
+	public int sizeOfRequiredTypeOfCourse(String type) {
+		int count = 0;
+		for (CourseCondition course : this.requirements)
+			if (ProcessString.compare(course.getTypeName(), type))
+				count++;
+		return count;
 	}
 
 	public void setRequirements(ArrayList<CourseCondition> requirements) {
 		this.requirements = requirements;
 	}
 
-	public void addCourseCondition(CourseCondition other) {
+	/**
+	 * Return whether it already has the requirement or not
+	 */
+	public boolean containsRequirement(CourseCondition requirementCheck) {
+		for (CourseCondition requirement : this.requirements)
+			if (requirement.equals(requirementCheck)) 
+				return true;
+		return false;  
+	}
+
+	public void addCourseCondition(CourseCondition other) throws OutOfCapacityException, AlreadyExistException {
+		if (this.sizeOfRequiredTypeOfCourse(other.getTypeName()) >= other.getMAX_COURSES())
+			throw new OutOfCapacityException();
+		if (this.containsRequirement(other))
+			throw new AlreadyExistException();
 		this.requirements.add(other);
 	}
 
+	@Override
+	public boolean equals(Object object) {
+		if (this == object)
+			return true;
+		if (object == null || this.getClass() != object.getClass())
+			return false;
+		Course course = (Course) object;
+		return ProcessString.compare(course.courseName, this.courseName)
+				&& ProcessString.compare(course.courseCode, this.courseCode);
+	}
 }

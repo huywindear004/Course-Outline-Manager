@@ -6,7 +6,15 @@ public class EducationalSystemManager {
     private ArrayList<EducationalSystem> listEducationalSystem;
 
     public EducationalSystemManager() {
-        listEducationalSystem = new ArrayList<>();
+        this.listEducationalSystem = new ArrayList<>();
+    }
+
+    public void addEducationalSystem(EducationalSystem educationalSystem) {
+        this.listEducationalSystem.add(educationalSystem);
+    }
+
+    public void removeEducationalSystem(EducationalSystem educationalSystem) {
+        this.listEducationalSystem.remove(educationalSystem);
     }
 
     public void displayEducationalSystems() {
