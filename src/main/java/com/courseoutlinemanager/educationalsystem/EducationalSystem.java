@@ -8,19 +8,34 @@ public abstract class EducationalSystem {
 	private ArrayList<Course> courseList;
 
 	public boolean contains(Course course) {
-		return false;
+		return courseList.contains(course);
 	}
 
 	public String toString() {
-		return null;
+		StringBuilder stringBuilder = new StringBuilder();
+		stringBuilder.append("Courses in the system:\n");
+		for (Course course : courseList) {
+			stringBuilder.append(course.toString()).append("\n");
+		}
+		return stringBuilder.toString();
 	}
 
 	public void addCourse(Course course) {
-
+		if (!courseList.contains(course)) {
+			courseList.add(course);
+			System.out.println("Course added: " + course.getCourseName());
+		} else {
+			System.out.println("Course already exists: " + course.getCourseName());
+		}
 	}
 
 	public void removeCourse(Course course) {
-
+		if (courseList.contains(course)) {
+			courseList.remove(course);
+			System.out.println("Course removed: " + course.getCourseName());
+		} else {
+			System.out.println("Course not found: " + course.getCourseName());
+		}
 	}
 
 }
