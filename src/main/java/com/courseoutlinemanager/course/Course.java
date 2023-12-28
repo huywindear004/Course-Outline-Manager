@@ -98,27 +98,33 @@ public class Course {
 	}
 
 	public KnowledgeBlock getKnowledgeBlock() {
-		return knowledgeBlock;
+		return this.knowledgeBlock;
 	}
 
 	public void setKnowledgeBlock(KnowledgeBlock knowledgeBlock) {
 		this.knowledgeBlock = knowledgeBlock;
 	}
 
+	// =============================================================COURSE OUTLINE=============================================================
+	public ArrayList<CourseOutline> getCourseOutlines() {
+		return this.courseOutlines;
+	}
+
+	public void setCourseOutlines(ArrayList<CourseOutline> courseOutlines) {
+		this.courseOutlines = courseOutlines;
+	}
+
+	public void addCourseOutline(CourseOutline outline) {
+		
+	}
+
+	// =============================================================EDUCATIONAL SYSTEM=============================================================
 	public ArrayList<EducationalSystem> getEducationalSystem() {
 		return educationalSystem;
 	}
 
 	public void setEducationalSystem(ArrayList<EducationalSystem> educationalSystem) {
 		this.educationalSystem = educationalSystem;
-	}
-
-	public ArrayList<CourseOutline> getCourseOutlines() {
-		return courseOutlines;
-	}
-
-	public void setCourseOutlines(ArrayList<CourseOutline> courseOutlines) {
-		this.courseOutlines = courseOutlines;
 	}
 
 	// =============================================================REQUIREMENTS=============================================================
@@ -150,7 +156,8 @@ public class Course {
 	 * @throws AlreadyExistException
 	 * If there is the equivalent course in the requirement.
 	 */
-	public void addCourseRequirements(String typeOfRequirement, Course course) throws OutOfCapacityException, AlreadyExistException {
+	public void addCourseRequirements(String typeOfRequirement, Course course)
+	throws OutOfCapacityException, AlreadyExistException {
 		for(CourseCondition i : this.requirements)
 			if(ProcessString.equalsByAlphabet(i.getTypeName(),typeOfRequirement))
 				i.addCourse(course);

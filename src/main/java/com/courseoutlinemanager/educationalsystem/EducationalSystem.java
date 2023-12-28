@@ -10,12 +10,11 @@ public abstract class EducationalSystem {
 
 	private ArrayList<Course> courseList;
 
+	public abstract String getTypeName();   
+	
 	public boolean containsCourse(Course course) {
 		return courseList.contains(course);
 	}
-
-	@Override
-	public abstract String toString();   
 
 	public void addCourse(Course course) throws AlreadyExistException {
 		if (this.containsCourse(course))

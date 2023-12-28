@@ -45,13 +45,16 @@ public class Assessment {
 		this.weight = weight;
 	}
 
+
+
+	// Check type when setting
 	public void setAssessingType(String type) {
 		for (AssessmentTypes i : AssessmentTypes.values()) {
 			if (ProcessString.equalsByAlphabet(type, i.toString()))
 				this.assessingType = i;
 		}
 	}
-
+	//Check method when setting
 	public void setAssessingMethod(String method) {
 		for (AssessmentMethods i : AssessmentMethods.values()) {
 			if (ProcessString.equalsByAlphabet(method, i.toString()))
