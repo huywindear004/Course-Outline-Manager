@@ -52,6 +52,14 @@ public class Course {
 		this.courseCredits = courseCredits;
 	}
 
+	public Course(String courseCode, String courseName, ArrayList<EducationalSystem> educationalSystems, KnowledgeBlock block, int courseCredits) {
+		this(courseCode, courseName);
+		this.educationalSystem = educationalSystems;
+		this.knowledgeBlock = block;
+		this.courseCredits = courseCredits;
+	}
+
+
 	public Course(String courseCode, String courseName, String courseDescription, int courseCredits,
 			KnowledgeBlock knowledgeBlock, ArrayList<EducationalSystem> educationalSystem,
 			ArrayList<CourseOutline> courseOutlines, ArrayList<CourseCondition> requirements) {

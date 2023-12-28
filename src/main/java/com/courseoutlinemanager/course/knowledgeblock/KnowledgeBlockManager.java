@@ -7,18 +7,18 @@ import java.util.ArrayList;
 
 public class KnowledgeBlockManager {
 
-	private ArrayList<KnowledgeBlock> knowledgeBlockList;
+	private static ArrayList<KnowledgeBlock> knowledgeBlockList;
 
-	public KnowledgeBlockManager() {
-		this.knowledgeBlockList = new ArrayList<>();
+	static{
+		knowledgeBlockList = new ArrayList<>();
 		//add discipline, foundation, major initially
-		this.knowledgeBlockList.add(new Discipline());
-		this.knowledgeBlockList.add(new Foundation());
-		this.knowledgeBlockList.add(new Major());
+		knowledgeBlockList.add(new Discipline());
+		knowledgeBlockList.add(new Foundation());
+		knowledgeBlockList.add(new Major());
 	}
 
-	public KnowledgeBlock getKnowledgeBlock(String blockName) throws NotFoundException{
-		for(KnowledgeBlock i : this.knowledgeBlockList)
+	public static KnowledgeBlock getKnowledgeBlock(String blockName) throws NotFoundException{
+		for(KnowledgeBlock i : knowledgeBlockList)
 			if(ProcessString.equalsByAlphabet(i.getTypeName(),blockName))
 				return i;
 		throw new NotFoundException();
