@@ -47,14 +47,14 @@ public class Assessment {
 
 	public void setAssessingType(String type) {
 		for (AssessmentTypes i : AssessmentTypes.values()) {
-			if (ProcessString.compare(type, i.toString()))
+			if (ProcessString.equalsByAlphabet(type, i.toString()))
 				this.assessingType = i;
 		}
 	}
 
 	public void setAssessingMethod(String method) {
 		for (AssessmentMethods i : AssessmentMethods.values()) {
-			if (ProcessString.compare(method, i.toString()))
+			if (ProcessString.equalsByAlphabet(method, i.toString()))
 				this.assessingMethod = i;
 		}
 	}

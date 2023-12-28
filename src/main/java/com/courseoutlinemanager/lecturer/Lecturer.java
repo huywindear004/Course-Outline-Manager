@@ -42,7 +42,7 @@ public class Lecturer {
 	}
 
 	public void removeCourseOutline(String outlineName) {
-		this.courseOutlines.removeIf(outline -> ProcessString.compare(outlineName, outline.toString()));
+		this.courseOutlines.removeIf(outline -> ProcessString.equalsByAlphabet(outlineName, outline.getCourse().getCourseName()));
 	}
 
 	public boolean contains(CourseOutline outline) {
@@ -53,8 +53,8 @@ public class Lecturer {
 
 	public boolean contains(String outlineName, String courseId) {
 		for (CourseOutline outline : this.courseOutlines)
-			if (ProcessString.compare(outline.getCourse().getCourseName(), outlineName)
-					&& ProcessString.compare(outline.getCourse().getCourseCode(), courseId))
+			if (ProcessString.equalsByAlphabet(outline.getCourse().getCourseName(), outlineName)
+					&& ProcessString.equalsByAlphabet(outline.getCourse().getCourseCode(), courseId))
 				return true;
 		return false;
 	}
@@ -64,9 +64,7 @@ public class Lecturer {
 	}
 
 	public boolean hasEnoughCourseOutlines() {
-		if (this.getCourseOutlinesNum() <= MAX_COURSEOUTLINES)
-			return false;
-		return true;
-	}
+        return this.getCourseOutlinesNum() > MAX_COURSEOUTLINES;
+    }
 
 }

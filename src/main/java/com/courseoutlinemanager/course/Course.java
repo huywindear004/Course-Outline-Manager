@@ -4,6 +4,8 @@ import com.courseoutlinemanager.common.ProcessString;
 import com.courseoutlinemanager.common.customexception.AlreadyExistException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
+import com.courseoutlinemanager.course.coursecondition.PrerequisiteCourses;
+import com.courseoutlinemanager.course.coursecondition.PreviousCourses;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.course.knowledgeblock.*;
 import com.courseoutlinemanager.educationalsystem.*;
@@ -33,6 +35,9 @@ public class Course {
 		this.educationalSystem = new ArrayList<>();
 		this.courseOutlines = new ArrayList<>();
 		this.requirements = new ArrayList<>();
+		//add previousCourses and PrerequisiteCourses initially
+		this.requirements.add(new PreviousCourses());
+		this.requirements.add(new PrerequisiteCourses());
 	}
 
 	public Course(String courseCode, String courseName) {
@@ -124,21 +129,10 @@ public class Course {
 	/**
 	 * Return the required course list
 	 */
-	public ArrayList<CourseCondition> getRequirements(String typeOfRequiredCourse) {
-		return new ArrayList<CourseCondition>(this.requirements.stream()
-				.filter(course -> ProcessString.compare(course.getTypeName(), typeOfRequiredCourse))
-				.collect(Collectors.toList()));
-	}
-
-	/**
-	 * Return the size of the requirement types
-	 */
-	public int sizeOfRequiredTypeOfCourse(String type) {
-		int count = 0;
-		for (CourseCondition course : this.requirements)
-			if (ProcessString.compare(course.getTypeName(), type))
-				count++;
-		return count;
+	public ArrayList<CourseCondition> getRequirements(String typeOfRequirement) {
+		return this.requirements.stream()
+                .filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
+				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
 	public void setRequirements(ArrayList<CourseCondition> requirements) {
@@ -146,31 +140,35 @@ public class Course {
 	}
 
 	/**
-	 * Return whether it already has the requirement or not
+	 * Add course to list.
+	 * @param typeOfRequirement
+	 * Type of the requirement that the course needs to be added to
+	 * @param course
+	 * Course that needs to be added
+	 * @throws OutOfCapacityException
+	 * If the requirement is enough of elements.
+	 * @throws AlreadyExistException
+	 * If there is the equivalent course in the requirement.
 	 */
-	public boolean containsRequirement(CourseCondition requirementCheck) {
-		for (CourseCondition requirement : this.requirements)
-			if (requirement.equals(requirementCheck)) 
-				return true;
-		return false;  
+	public void addCourseRequirements(String typeOfRequirement, Course course) throws OutOfCapacityException, AlreadyExistException {
+		for(CourseCondition i : this.requirements)
+			if(ProcessString.equalsByAlphabet(i.getTypeName(),typeOfRequirement))
+				i.addCourse(course);
 	}
 
-	public void addCourseCondition(CourseCondition other) throws OutOfCapacityException, AlreadyExistException {
-		if (this.sizeOfRequiredTypeOfCourse(other.getTypeName()) >= other.getMAX_COURSES())
-			throw new OutOfCapacityException();
-		if (this.containsRequirement(other))
-			throw new AlreadyExistException();
-		this.requirements.add(other);
-	}
-
+	/**
+	 * Return true if courseCode and courseName is the same. False if vice versa.
+	 * @param o
+	 * Given object
+	 * @return
+	 * True if courseCode and courseName is the same
+	 */
 	@Override
-	public boolean equals(Object object) {
-		if (this == object)
-			return true;
-		if (object == null || this.getClass() != object.getClass())
-			return false;
-		Course course = (Course) object;
-		return ProcessString.compare(course.courseName, this.courseName)
-				&& ProcessString.compare(course.courseCode, this.courseCode);
+	public boolean equals(Object o) {
+		if (this == o) return true;
+		if (o == null || this.getClass() != o.getClass()) return false;
+		Course course = (Course) o;
+		return ProcessString.equalsByAlphabet(course.courseName, this.courseName)
+				&& ProcessString.equalsByAlphabet(course.courseCode, this.courseCode);
 	}
 }

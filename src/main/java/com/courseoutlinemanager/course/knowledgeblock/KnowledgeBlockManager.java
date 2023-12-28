@@ -10,10 +10,9 @@ public class KnowledgeBlockManager {
 
 	public KnowledgeBlockManager() {
 		this.knowledgeBlockList = new ArrayList<>();
-	}
-
-	public KnowledgeBlockManager(ArrayList<KnowledgeBlock> knowledgeBlockList) {
-		this.knowledgeBlockList = knowledgeBlockList;
+		this.knowledgeBlockList.add(new Discipline());
+		this.knowledgeBlockList.add(new Foundation());
+		this.knowledgeBlockList.add(new Major());
 	}
 
 	public void addKnowledgeBlock(KnowledgeBlock block) {
@@ -25,7 +24,10 @@ public class KnowledgeBlockManager {
 	}
 
 	public void removeKnowledgeBlock(String name) {
-		this.knowledgeBlockList.removeIf(knowledgeBlock -> ProcessString.compare(name, knowledgeBlock.toString()));
+		this.knowledgeBlockList.removeIf(knowledgeBlock -> ProcessString.equalsByAlphabet(name, knowledgeBlock.toString()));
 	}
-	
+
+	public KnowledgeBlock getKnowledgeBlock(String name){
+		return null;
+	}
 }
