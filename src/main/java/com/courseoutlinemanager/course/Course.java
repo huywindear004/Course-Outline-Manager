@@ -14,6 +14,9 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Course {
+	private static int courseCodeCount = 1;
+
+	private static int MAX_OUTLINES = 1;
 
 	private String courseCode;
 
@@ -30,8 +33,8 @@ public class Course {
 	private ArrayList<CourseOutline> courseOutlines;
 
 	private ArrayList<CourseCondition> requirements;
-
-	public Course() {
+	
+	public Course() {	
 		this.educationalSystem = new ArrayList<>();
 		this.courseOutlines = new ArrayList<>();
 		this.requirements = new ArrayList<>();
@@ -40,10 +43,22 @@ public class Course {
 		this.requirements.add(new PrerequisiteCourses());
 	}
 
+	/**
+	 * This constructor is for user input operation
+	 */
+	public Course(String courseName) {
+		this.courseName = courseName;
+		this.courseCode = String.format("COUR%03d", courseCodeCount++);
+	}
+
+	/**
+	 * This constructor just only for compare operation between courses
+	 * (Hàm khởi tạo 2 tham số này chỉ dành cho việc tạo môn học mới để so sánh với các môn học khác)
+	 */
 	public Course(String courseCode, String courseName) {
 		this.courseCode = courseCode;
 		this.courseName = courseName;
-	}
+	}	
 
 	public Course(String courseCode, String courseName, String courseDescription, int courseCredits) {
 		this.courseCode = courseCode;
@@ -53,24 +68,11 @@ public class Course {
 	}
 
 	public Course(String courseCode, String courseName, ArrayList<EducationalSystem> educationalSystems, KnowledgeBlock block, int courseCredits) {
-		this(courseCode, courseName);
+		this.courseCode = courseCode;
+		this.courseName = courseName;
 		this.educationalSystem = educationalSystems;
 		this.knowledgeBlock = block;
 		this.courseCredits = courseCredits;
-	}
-
-
-	public Course(String courseCode, String courseName, String courseDescription, int courseCredits,
-			KnowledgeBlock knowledgeBlock, ArrayList<EducationalSystem> educationalSystem,
-			ArrayList<CourseOutline> courseOutlines, ArrayList<CourseCondition> requirements) {
-		this.courseCode = courseCode;
-		this.courseName = courseName;
-		this.courseDescription = courseDescription;
-		this.courseCredits = courseCredits;
-		this.knowledgeBlock = knowledgeBlock;
-		this.educationalSystem = educationalSystem;
-		this.courseOutlines = courseOutlines;
-		this.requirements = requirements;
 	}
 
 	public String getCourseCode() {
@@ -118,12 +120,11 @@ public class Course {
 		return this.courseOutlines;
 	}
 
-	public void setCourseOutlines(ArrayList<CourseOutline> courseOutlines) {
-		this.courseOutlines = courseOutlines;
-	}
 
-	public void addCourseOutline(CourseOutline outline) {
-		
+	public void addCourseOutline(CourseOutline outline) throws OutOfCapacityException{
+		if(this.courseOutlines.size() >= MAX_OUTLINES)
+			throw new OutOfCapacityException(String.format("%s(%s)'s outline list is enough"));
+		this.courseOutlines.add(outline);
 	}
 
 	// =============================================================EDUCATIONAL SYSTEM=============================================================
@@ -165,12 +166,12 @@ public class Course {
 	 * If there is the equivalent course in the requirement.
 	 */
 	public void addCourseRequirements(String typeOfRequirement, Course course)
-	throws OutOfCapacityException, AlreadyExistException {
+	throws OutOfCapacityException {
 		for(CourseCondition i : this.requirements)
 			if(ProcessString.equalsByAlphabet(i.getTypeName(),typeOfRequirement))
 				i.addCourse(course);
 	}
-
+	
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.
 	 * @param o

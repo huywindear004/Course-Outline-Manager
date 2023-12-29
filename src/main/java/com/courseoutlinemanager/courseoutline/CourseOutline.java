@@ -35,6 +35,10 @@ public class CourseOutline {
 		this.grades = new ArrayList<>();
 	}
 
+	public CourseOutline(Course course) {
+		this.course = course;
+	}
+
 	public CourseOutline(Course course, Lecturer compiler) {
 		this.course = course;
 		this.compiler = compiler;
@@ -105,7 +109,7 @@ public class CourseOutline {
 			currTotalWeight += i.getWeight();
 		if (Double.compare(currTotalWeight, TOTAL_WEIGHT) > 0
 				|| Double.compare(currTotalWeight + weight, TOTAL_WEIGHT) > 0)
-			throw new OutOfCapacityException("The total weight would be greater than 100%");
+			throw new OutOfCapacityException("The total weight should be less than 100%");
 		this.grades.add(new Assessment(type, method, weight));
 	}
 
@@ -118,6 +122,8 @@ public class CourseOutline {
 			this.grades.remove(position);
 		}
 	}
+
+
 
 	@Override
 	public boolean equals(Object o) {

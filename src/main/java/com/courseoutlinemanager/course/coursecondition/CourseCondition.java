@@ -1,13 +1,13 @@
 package com.courseoutlinemanager.course.coursecondition;
 
-import com.courseoutlinemanager.common.customexception.AlreadyExistException;
+import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.Course;
 
 import java.util.ArrayList;
 
 public abstract class CourseCondition {
-    private ArrayList<Course> courses;
+    private ArrayList<Course> courses; 
 
     public abstract String getTypeName();
 
@@ -31,21 +31,26 @@ public abstract class CourseCondition {
         this.courses = courses;
     }
 
+    private Course getCourseIfItExist(Course course) throws NotFoundException{
+        for (Course c : courses) {
+            if (course.equals(c))
+                return c;
+        }
+        throw new NotFoundException();
+    }
     /**
-     * Add course to list.
-     * 
+     * Add course to list. If the toBeAddedCourse is already in the requirement, then 
+     * assign the existedCourse to the toBeAddedCourse.
      * @param course
      *               Given course
      * @throws OutOfCapacityException
      *                                If the list is enough of elements.
-     * @throws AlreadyExistException
-     *                                If there is the equivalent course in the list
      */
-    public void addCourse(Course course) throws OutOfCapacityException, AlreadyExistException {
-        if (this.courses.contains(course))
-            throw new AlreadyExistException();
+    public void addCourse(Course course) throws OutOfCapacityException{
+        try{course = this.getCourseIfItExist(course);
+        } catch (NotFoundException ignored) {}
         if (this.courses.size() >= this.getMAX_COURSES())
-            throw new OutOfCapacityException();
+            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!",getTypeName()));
         this.courses.add(course);
     }
 

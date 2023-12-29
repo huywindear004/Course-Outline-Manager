@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class KnowledgeBlockManager {
 
-	private static ArrayList<KnowledgeBlock> knowledgeBlockList;
+	private ArrayList<KnowledgeBlock> knowledgeBlockList;
 
-	static{
+	public KnowledgeBlockManager(){
 		knowledgeBlockList = new ArrayList<>();
 		//add discipline, foundation, major initially
 		knowledgeBlockList.add(new Discipline());
@@ -17,10 +17,10 @@ public class KnowledgeBlockManager {
 		knowledgeBlockList.add(new Major());
 	}
 
-	public static KnowledgeBlock getKnowledgeBlock(String blockName) throws NotFoundException{
+	public KnowledgeBlock getKnowledgeBlock(String blockName) throws NotFoundException{
 		for(KnowledgeBlock i : knowledgeBlockList)
 			if(ProcessString.equalsByAlphabet(i.getTypeName(),blockName))
 				return i;
-		throw new NotFoundException();
+		throw new NotFoundException("Couldn't find "+blockName);
 	}
 }
