@@ -24,7 +24,7 @@ public class Course {
 
 	private int courseCredits;
 
-	private KnowledgeBlock knowledgeBlock;
+	private KnowledgeBlock knowledgeBlock = KnowledgeBlock.NULL;
 
 	private ArrayList<CourseOutline> courseOutlines;
 

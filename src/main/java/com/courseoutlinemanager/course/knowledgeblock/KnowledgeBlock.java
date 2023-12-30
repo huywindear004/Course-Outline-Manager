@@ -1,6 +1,15 @@
 package com.courseoutlinemanager.course.knowledgeblock;
 
-public abstract class KnowledgeBlock {
-	
-	public abstract String getTypeName();
+public enum KnowledgeBlock {
+	NULL,
+
+	FOUNDATION,
+
+	DISCIPLINE,
+
+	MAJOR;
+
+	public String toString() {
+		return super.toString().replaceAll("_", " ");
+	}
 }

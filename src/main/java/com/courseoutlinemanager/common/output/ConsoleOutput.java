@@ -23,9 +23,13 @@ public class ConsoleOutput {
     }
 
     public static void printCourse(Course course) {
-        System.out.println(printLabel("COURSE INFORMATION", " ", WIDTH));
+        System.out.println(printLabel("COURSE INFORMATION", "=", WIDTH));
         System.out.println(printLine("1. Course Name: " + course.getCourseName(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("2. Course Code: " + course.getCourseCode(), 1, WIDTH, INDENT_SPACE));
+        System.out.println(printLine("3. Knowledge block: " + course.getKnowledgeBlock(), 1, WIDTH, INDENT_SPACE));
+        System.out.println(printLine("4. Credits: " + course.getCourseCredits(), 1, WIDTH, INDENT_SPACE));
+        System.out.println(printLine("5. Course Code: " + course.getCourseDescription(), 1, WIDTH, INDENT_SPACE));
+
         System.out.println(printLabel("", "=", WIDTH));
     }
     
@@ -41,7 +45,7 @@ public class ConsoleOutput {
                 printLine("2. Course Code: " + courseOutline.getCourse().getCourseCode(), 1, WIDTH,
                         INDENT_SPACE));
         System.out.println(printLine("3. Belongs to the knowledge/skills block:) "
-                + courseOutline.getCourse().getKnowledgeBlock().getTypeName(), 1, WIDTH, INDENT_SPACE));
+                + courseOutline.getCourse().getKnowledgeBlock().toString(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine(
                 "4. Number of credits: " + courseOutline.getCourse().getCourseCredits(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("5. In charge of the topic: ", 1, WIDTH, INDENT_SPACE));

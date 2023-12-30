@@ -18,5 +18,4 @@ public enum AssessmentMethods {
 	public String toString() {
 		return super.toString().replaceAll("_", " ");
 	}
-
 }

@@ -35,10 +35,6 @@ public class CourseManager {
         return courseList.remove(deleteCourse);
     }
 
-    public boolean deleteCourse(String courseName, String courseCode) {
-        Course toDelete = new Course(courseCode, courseName);
-        return courseList.remove(toDelete);
-    }
 
     public ArrayList<Course> getCourseList() {
         return courseList;

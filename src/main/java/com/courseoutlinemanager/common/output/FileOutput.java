@@ -13,14 +13,6 @@ public class FileOutput {
     private static final int WIDTH = 100;
     private static final int INDENT_SPACE = 4;
 
-    // public static String ArrayList<String> tmp0) {
-    //     String tmp = "";
-    //     for (String line : tmp0) {
-    //         tmp += line;
-    //     }
-    //     return tmp;
-    // }
-
     public static void writeOutLine(CourseOutline courseOutline, String filePath) throws IOException {
         try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
             writer.write(printLabel("Open University", " ", WIDTH));
@@ -34,7 +26,7 @@ public class FileOutput {
             writer.write(
                     printLine(
                             "\n3.Belongs to the knowledge/skills block: "
-                                    + courseOutline.getCourse().getKnowledgeBlock().getTypeName(),
+                                    + courseOutline.getCourse().getKnowledgeBlock().toString(),
                             1, WIDTH, INDENT_SPACE));
             writer.write(printLine(
                     "\n4.Number of credits: " + courseOutline.getCourse().getCourseCredits(), 1, WIDTH, INDENT_SPACE));

@@ -84,12 +84,14 @@ public class ProcessString {
         return res.toString();
     }
 
-    public static String stringConcat(ArrayList<String> tmp0) {
-        String tmp = "";
-        for (String line : tmp0) {
-            tmp += line;
-        }
-        return tmp;
+    public static String stringConcat(ArrayList<String> strings) {
+        StringBuilder temp = new StringBuilder();
+        if(strings.size() == 1)
+            return strings.get(0);
+        else
+            for (String line : strings)
+                temp.append(line + "\n");
+        return temp.toString();
     }
     
     public static ArrayList<String> getFileNames(String path, String... excludedString) {

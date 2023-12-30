@@ -8,7 +8,7 @@ import java.util.Scanner;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.course.CourseManager;
-import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlockManager;
+import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
@@ -23,7 +23,7 @@ public class ConsoleInput {
 
     private static String srcPath = "./src/main/java/com/courseoutlinemanager/";
 
-    public static Course createCourse(EducationalSystemManager eSM, CourseManager cM, KnowledgeBlockManager kBM) {
+    public static Course createCourse(EducationalSystemManager eSM, CourseManager cM) {
         printLabel("CREATE COURSE", "=", getWidth());
         System.out.print("Enter course name: ");
         Course newCourse = new Course(sc.nextLine());
