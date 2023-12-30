@@ -92,8 +92,7 @@ public class FileInput {
         File[] inputs = new File(path).listFiles();
         for(File i : inputs){
             try {
-                ConsoleOutput.printCourse(
-                    getCourse(i, new EducationalSystemManager(), new CourseManager()));
+                ConsoleOutput.printCourse(getCourse(i, new EducationalSystemManager(), new CourseManager()));
             } catch (FileNotFoundException | NotFoundException | WrongFormatException e) {
                 System.out.println(printLabel(e.getMessage(),"!",90));
             }

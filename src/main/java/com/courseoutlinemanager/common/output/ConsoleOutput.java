@@ -32,7 +32,7 @@ public class ConsoleOutput {
 
         System.out.println(printLabel("", "=", WIDTH));
     }
-    
+
     public static void printCourseOutline(CourseOutline courseOutline) {
         System.out.println(printLabel("OPEN UNIVERSITY", " ", WIDTH));
         System.out.println(printLabel("---------------", " ", WIDTH));
@@ -59,19 +59,19 @@ public class ConsoleOutput {
                         WIDTH, INDENT_SPACE));
         System.out.println(printLine("2. Requirements:", 1, WIDTH, INDENT_SPACE));
 
-        for (CourseCondition requirements : courseOutline.getCourse().getRequirements()) {
+        for (CourseCondition requirements : courseOutline.getCourse().getRequirementList()) {
             System.out.println(
                     printLine("- " + requirements.getTypeName() + ":", 2, WIDTH, INDENT_SPACE));
-            for (Course i : requirements.getCourses()) {
+            for (Course i : requirements.getCourseList()) {
                 System.out.println(printTable(i.getCourseName(), i.getCourseCode(), 3, WIDTH, INDENT_SPACE));
             }
         }
         System.out.println(printLine("3. Subject objectives:", 1, WIDTH, INDENT_SPACE));
-        for (String i : courseOutline.getCourseObjectives()) {
+        for (String i : courseOutline.getCourseObjectiveList()) {
             System.out.println(printLine("- " + i, 2, WIDTH, INDENT_SPACE));
         }
         System.out.println(printLine("4. Subject outcome standards: ", 1, WIDTH, INDENT_SPACE));
-        for (String i : courseOutline.getLearningOutcomes()) {
+        for (String i : courseOutline.getLearningOutcomeList()) {
             System.out.println(printLine("- " + i, 2, WIDTH, INDENT_SPACE));
         }
         System.out.println(printLine("5. Subject content:", 1, WIDTH, INDENT_SPACE));
@@ -80,7 +80,7 @@ public class ConsoleOutput {
         }
         System.out.println(printLine("6. Student assessment: ", 1, WIDTH, INDENT_SPACE));
         System.out.println(printTable("Assessing type", "Assessing method", "Weight", 2, WIDTH, INDENT_SPACE));
-        for (Assessment i : courseOutline.getGrades()) {
+        for (Assessment i : courseOutline.getGradeList()) {
             System.out.println(
                     printTable(i.getAssessingType().toString(), i.getAssessingMethod().toString(),
                             String.valueOf(i.getWeight()), 3, WIDTH, INDENT_SPACE));
@@ -89,26 +89,26 @@ public class ConsoleOutput {
     }
 
     public static void printMainMenu() {
-        String []text = {
-            "1. Create a course outline.",
-            "2. Read custom input data.",
-            "3. Edit information of a course outline.",
-            "4. Find course.",
-            "5. Find all courses which this course is part of it's requirements.",
-            "6. Sort course outline list.",
-            "7. Find the course outlines of a lecturer by Id.",
-            "8. Export a full course outline.",
-            "9. Show statistic on the number of course outline by its number of credits"
+        String[] text = {
+                "1. Create a course outline.",
+                "2. Read custom input data.",
+                "3. Edit information of a course outline.",
+                "4. Find course.",
+                "5. Find all courses which this course is part of it's requirements.",
+                "6. Sort course outline list.",
+                "7. Find the course outlines of a lecturer by Id.",
+                "8. Export a full course outline.",
+                "9. Show statistic on the number of course outline by its number of credits"
         };
         printChoiceMenu("MAIN MENU", text);
     }
 
     public static void printExportMenu() {
-        String []text = {
-            "1. Export to console.",
-            "2. Export to .txt file."
+        String[] text = {
+                "1. Export to console.",
+                "2. Export to .txt file."
         };
-        printChoiceMenu("EXPORT COURSE OUTLINE",text);
+        printChoiceMenu("EXPORT COURSE OUTLINE", text);
     }
 
     public static void printEditOutlineMenu(CourseOutline outline) {
@@ -174,7 +174,7 @@ public class ConsoleOutput {
         return res;
     }
 
-    public static void main(String[] args) { 
-        
+    public static void main(String[] args) {
+
     }
 }
