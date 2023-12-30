@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 public class Course {
+	private static int courseCodeCount = 1;
 
 	private String courseCode;
 
@@ -25,14 +26,11 @@ public class Course {
 
 	private KnowledgeBlock knowledgeBlock;
 
-	private ArrayList<EducationalSystem> educationalSystem;
-
 	private ArrayList<CourseOutline> courseOutlines;
 
 	private ArrayList<CourseCondition> requirements;
-
-	public Course() {
-		this.educationalSystem = new ArrayList<>();
+	
+	public Course() {	
 		this.courseOutlines = new ArrayList<>();
 		this.requirements = new ArrayList<>();
 		//add previousCourses and PrerequisiteCourses initially
@@ -40,30 +38,22 @@ public class Course {
 		this.requirements.add(new PrerequisiteCourses());
 	}
 
+	/**
+	 * This constructor is for user input operation
+	 */
+	public Course(String courseName) {
+		this.courseName = courseName;
+		this.courseCode = String.format("COUR%03d", courseCodeCount++);
+	}
+
+	/**
+	 * This constructor just only for compare operation between courses
+	 * (Hàm khởi tạo 2 tham số này chỉ dành cho việc tạo môn học mới để so sánh với các môn học khác)
+	 */
 	public Course(String courseCode, String courseName) {
 		this.courseCode = courseCode;
 		this.courseName = courseName;
-	}
-
-	public Course(String courseCode, String courseName, String courseDescription, int courseCredits) {
-		this.courseCode = courseCode;
-		this.courseName = courseName;
-		this.courseDescription = courseDescription;
-		this.courseCredits = courseCredits;
-	}
-
-	public Course(String courseCode, String courseName, String courseDescription, int courseCredits,
-			KnowledgeBlock knowledgeBlock, ArrayList<EducationalSystem> educationalSystem,
-			ArrayList<CourseOutline> courseOutlines, ArrayList<CourseCondition> requirements) {
-		this.courseCode = courseCode;
-		this.courseName = courseName;
-		this.courseDescription = courseDescription;
-		this.courseCredits = courseCredits;
-		this.knowledgeBlock = knowledgeBlock;
-		this.educationalSystem = educationalSystem;
-		this.courseOutlines = courseOutlines;
-		this.requirements = requirements;
-	}
+	}	
 
 	public String getCourseCode() {
 		return courseCode;
@@ -98,27 +88,39 @@ public class Course {
 	}
 
 	public KnowledgeBlock getKnowledgeBlock() {
-		return knowledgeBlock;
+		return this.knowledgeBlock;
 	}
 
 	public void setKnowledgeBlock(KnowledgeBlock knowledgeBlock) {
 		this.knowledgeBlock = knowledgeBlock;
 	}
 
-	public ArrayList<EducationalSystem> getEducationalSystem() {
-		return educationalSystem;
-	}
-
-	public void setEducationalSystem(ArrayList<EducationalSystem> educationalSystem) {
-		this.educationalSystem = educationalSystem;
-	}
-
+	// =============================================================COURSE OUTLINE=============================================================
 	public ArrayList<CourseOutline> getCourseOutlines() {
-		return courseOutlines;
+		return this.courseOutlines;
 	}
 
-	public void setCourseOutlines(ArrayList<CourseOutline> courseOutlines) {
-		this.courseOutlines = courseOutlines;
+
+
+	public void addCourseOutline(CourseOutline outline) throws AlreadyExistException {
+
+	}
+	
+	public boolean isAvailForOutline(String type) {
+		EducationalSystem eSys = null; 
+		//Get type of educational system to which outline in this list belongs
+		for (CourseOutline outline : this.courseOutlines) {
+			if (ProcessString.equalsByAlphabet(type, outline.getEducationalSystem().getTypeName()))
+				eSys = outline.getEducationalSystem();
+		}
+		if(eSys == null)	
+			return true;
+		int count = 0;
+		for (CourseOutline outline : this.courseOutlines) {
+			if(outline.getEducationalSystem().equals(eSys))
+				count++;
+		}
+		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương vào 
 	}
 
 	// =============================================================REQUIREMENTS=============================================================
@@ -150,12 +152,13 @@ public class Course {
 	 * @throws AlreadyExistException
 	 * If there is the equivalent course in the requirement.
 	 */
-	public void addCourseRequirements(String typeOfRequirement, Course course) throws OutOfCapacityException, AlreadyExistException {
+	public void addCourseRequirements(String typeOfRequirement, Course course)
+	throws OutOfCapacityException {
 		for(CourseCondition i : this.requirements)
 			if(ProcessString.equalsByAlphabet(i.getTypeName(),typeOfRequirement))
 				i.addCourse(course);
 	}
-
+	
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.
 	 * @param o
@@ -165,10 +168,16 @@ public class Course {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || this.getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || this.getClass() != o.getClass())
+			return false;
 		Course course = (Course) o;
-		return ProcessString.equalsByAlphabet(course.courseName, this.courseName)
-				&& ProcessString.equalsByAlphabet(course.courseCode, this.courseCode);
+		return ProcessString.equalsByAlphabet(course.courseCode, this.courseCode);
+	}
+
+	@Override
+	public String toString() {
+		return this.courseName + "(" + this.courseCode + ")";
 	}
 }

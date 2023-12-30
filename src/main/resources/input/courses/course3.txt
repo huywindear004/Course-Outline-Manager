@@ -1,0 +1,6 @@
+CourseCode: COUR001
+CourseName: OOP
+KnowledgeBlock: Discipline
+Credits: 4
+Description: This course teaches object-oriented programming to those who have learnt basic programming concepts and are ready to learn in-depth programming. It focuses on object-oriented programming using C++. The main concepts discussed are: Objects, Data Abstraction, Data Encapsulation, Polymorphism, and Inheritance. We teach the C++ language constructs that are used to implement these concepts. For example, Classes, Overloaded Operators, Overridden Methods, Friend Functions, Virtual Functions, and Templates, etc.
+PrerequisiteCourse: Programming techniques (COUR002), Introduction to programming(COUR004)

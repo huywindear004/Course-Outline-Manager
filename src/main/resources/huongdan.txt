@@ -1,0 +1,125 @@
+===============================================Nhap đề cương mới===================================================
+1. Nhập newLecturer(tên, id) ---- thử xem giảng viên đã tồn tại chưa. nếu chưa
+                                 thêm giảng viên vào trong lecturerManager
+    try
+        tempLecturer = LecturerManager.getLecturer(newLecturer);
+        
+        // đã tìm thấy người cùng id -> thông báo rằng sẽ lấy người có trước
+        #if( equalsByAlphabet(tempLecturer.name, newLecturer.name) )
+            -> SOUT("Trùng id. Sẽ tự động lấy giảng viên đã tồn tại.")
+            newLecturer = tempLecturer
+    
+    //không tìm thấy 
+    catch(NotFoundException)
+        -> hỏi người dùng có muốn thêm vào danh sách giảng viên không? 
+        if(không)
+            ->lặp lại bước 1
+        else
+            -> lecturerManager.addLEcturer(newLecturer)
+
+    if(newLecturer.hasEnoughOutlines() == true) 
+        ->SOUT("Giảng viên này đã tối đa lần tạo đề cương")
+        ->lặp lại bước 1
+
+
+môn: OOP(0001), PT(0002), LAW(0003), ITP(0004)
+input: P
+thì sẽ return {oop, pt, itp}
+in:
+OOP(0001), 
+PT(0002), 
+ITP(0004)
+-> bắt nhập lại 
+
+2. Nhập newCourse (tên môn hoặc mã môn)	----listCourse =  findCourse() thử xem môn học đã tồn tại chưa. nếu chưa thì hỏi xem có thêm ko
+                                   trả về list nếu listCourse.size() = 1 -> tự gán 
+                                                nếu list.size() > 1 -> in ra xong lặp lai bước 2
+    if(listCourse.isEmpty())
+        -> hỏi người dùng có muốn thêm vào danh sách môn không? 
+            nếu không -> lặp lại bước 2
+            nếu có  ->  {
+
+                courseManager.addCourse(newCourse)
+            } 
+                
+    else if(listCourse.size() == 1)
+		try
+            newCourse = courseManager.getCourse(newCourse)
+        catch(ignored)  
+            //da xu ly o findCourse()
+    else 
+        in ra listCourse -> lặp lại bước 2
+
+    ######(newCourse lúc này đã tham chiếu đến môn học có sẵn. hoặc là môn học mới)######
+
+--------------------
+MENU(3):
+1. Chinh quy
+2. Lien thong
+0. Thoat
+---------------------- 
+
+3. Nhập hệ đào tạo ---- (Thuộc 1 đề cương) nếu môn học này đã có đủ đề cương của hệ đào tạo thì sẽ in ra menu 
+                                            chưa thì thêm vào courseOutlineManager  , newCourse.courseOutlines[];
+                                            thêm hđt vào outline bằng EducationalSystemManager.getEducationalSystem();
+    
+	EducationalSystem e;
+
+    loop{
+        try{
+            MENU(3)
+            if(choice == 1)
+                e = EducationalSystemManager.getEducationalSystem("Chinh quy")
+            else if(choice == 2)
+                e = EducationalSystemManager.getEducationalSystem("Lien thong")
+
+            //kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
+            if(!newCourse.isAvailForOutline("Chinh quy || Lien thong"))
+                SOUT("Môn học đã có đề cương của hệ đào tạo ...")
+            ->Lặp lại bước 3
+            
+            newOutLine = new CourseOutline(newCourse, newLecturer, e);
+            courseOutlineManager.addOutline(newOutline)  // thêm đề cương này vào danh sách quản lý đề cương
+            newLecturer.courseOutlines.add(newOutLine)  // thêm đề cương này vào danh sách giảng viên
+
+
+            newCourse
+            break;
+
+        }catch(Không tìm thấy hệ đào tạo){
+            kết thúc mainmenu
+        }
+    }
+(newOutLine);
+
+
+4. Nhập thoong tin khac: 
+
+
+	
+===============================================Cập nhật thông tin đề cương===============================================
+                                                "1. Course description.",
+                                                "2. Knowledge block.",
+                                                "3. Compiler.",
+                                                "4. Course Objectives.",
+                                                "5. Learning outcomes.",
+                                                "6. Course content.",
+                                                "7. Requirements.",
+                                                "8. Learning outcomes.",
+                                                "9. Grades."
+Nhập mã giảng viên ---- 
+
+i. 
+
+    
+
+
+
+
+
+
+
+
+
+
+						

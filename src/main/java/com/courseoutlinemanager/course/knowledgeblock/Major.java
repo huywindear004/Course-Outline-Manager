@@ -3,7 +3,7 @@ package com.courseoutlinemanager.course.knowledgeblock;
 public class Major extends KnowledgeBlock{
 
     @Override
-    public String toString() {
+    public String getTypeName() {
         return "Major";
     }
 }
