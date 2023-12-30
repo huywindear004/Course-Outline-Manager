@@ -106,6 +106,8 @@ public class Course {
 
 	}
 
+
+	//kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
 	public boolean isAvailForOutline(String type) {
 		EducationalSystem eSys = null;
 		// Get type of educational system to which outline in this list belongs
@@ -121,7 +123,6 @@ public class Course {
 				count++;
 		}
 		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương
-														// vào
 	}
 
 	// =============================================================REQUIREMENTS=============================================================
@@ -161,6 +162,11 @@ public class Course {
 		for (CourseCondition i : this.requirementList)
 			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
 				i.addCourse(course);
+	}
+
+
+	public void showRequirementList() {
+		
 	}
 
 	/**

@@ -24,6 +24,7 @@ public class ConsoleOutput {
 
     public static void printCourse(Course course) {
         System.out.println(printLabel("COURSE INFORMATION", "=", WIDTH));
+        
         System.out.println(printLine("1. Course Name: " + course.getCourseName(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("2. Course Code: " + course.getCourseCode(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("3. Knowledge block: " + course.getKnowledgeBlock(), 1, WIDTH, INDENT_SPACE));
