@@ -109,17 +109,16 @@ public class ConsoleOutput {
 
     public static void printEditOutlineMenu(CourseOutline outline) {
         String[] menu = {
-                "1. Course code.",
-                "2. Course name.",
-                "3. Course description.",
-                "4. Knowledge block.",
-                "5. Compiler.",
-                "6. Course Objectives.",
-                "7. Learning outcomes.",
-                "8. Course content.",
-                "9. Requirements.",
-                "10. Learning outcomes.",
-                "11. Grades."
+                "1. Course.",
+                "2. Course description.",
+                "3. Knowledge block.",
+                "4. Compiler.",
+                "5. Course Objectives.",
+                "6. Learning outcomes.",
+                "7. Course content.",
+                "8. Requirements.",
+                "9. Learning outcomes.",
+                "10. Grades."
         };
         printChoiceMenu(
                 "EDIT " + outline.getCourse().getCourseName() + " (" + outline.getCourse().getCourseCode()
@@ -173,6 +172,5 @@ public class ConsoleOutput {
 
     public static void main(String[] args) { 
         
-        printEditOutlineMenu(new CourseOutline(new Course("ITEC004","OOP")));
     }
 }

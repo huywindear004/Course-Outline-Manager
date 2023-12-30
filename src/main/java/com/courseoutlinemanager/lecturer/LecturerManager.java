@@ -22,6 +22,13 @@ public class LecturerManager {
         this.lecturers = lecturers;
     }
 
+    public Lecturer getLecturer(Lecturer lect) throws NotFoundException{
+        int index = this.lecturers.indexOf(lect);
+        if(index == -1)
+            throw new NotFoundException("Couldn't find " + lect.toString());
+        return this.lecturers.get(index);
+    }
+
     /**
      * Add lecturer to the list
      * @param lecturer
@@ -29,14 +36,16 @@ public class LecturerManager {
      * @throws AlreadyExistException
      * If that lecturer already in the list
      */
-    public void addLecturer(Lecturer lecturer) throws AlreadyExistException {
-        if (this.lecturers.contains(lecturer))
-            throw new AlreadyExistException(lecturer.getName() + "(" + lecturer.getId() + ") already exist");
+    public void addLecturer(Lecturer lecturer){
         lecturers.add(lecturer);
     }
 
     public void removeLecturer(Lecturer lecturer) {
         lecturers.remove(lecturer);
+    }
+
+    public boolean containsLecturer(Lecturer lecturer) {
+        return this.lecturers.contains(lecturer);
     }
 
     /**

@@ -36,14 +36,6 @@ public class FileInput {
                 newCourse.setCourseCode(temp[1].trim());
             } else if (ProcessString.equalsByAlphabet(temp[0], "CourseName")) {
                 newCourse.setCourseName(temp[1].trim());
-            } else if (ProcessString.equalsByAlphabet(temp[0], "EducationalSystem")) {
-                //Gotta split that because 1 course can be shared between more than 1 EducationalSystem????whut?
-                temp = temp[1].split("[,;]");
-                ArrayList<EducationalSystem> educationalSystems = new ArrayList<>();
-                for (int i = 1; i < temp.length; i++) {
-                    educationalSystems.add(eSM.getEducationalSystem(temp[i]));
-                }
-                newCourse.setEducationalSystem(educationalSystems);
             } else if (ProcessString.equalsByAlphabet(temp[0], "KnowledgeBlock")) {
                 newCourse.setKnowledgeBlock(kBM.getKnowledgeBlock(temp[1]));
             } else if (ProcessString.equalsByAlphabet(temp[0], "Credits")) {
@@ -64,7 +56,7 @@ public class FileInput {
                     // Check if the tempCourse already existed in cM.courseList
                     try {
                         // if the tempCourse exist then change the reference of tempCourse to the existed course
-                        tempCourse = cM.getCourseIfItExist(tempCourse);
+                        tempCourse = cM.getCourse(tempCourse);
                     } catch (NotFoundException e) {
                         // if the course doensn't exist then add it to cM.courseList
                         cM.addCourse(tempCourse);

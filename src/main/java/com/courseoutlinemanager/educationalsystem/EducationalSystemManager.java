@@ -2,7 +2,6 @@ package com.courseoutlinemanager.educationalsystem;
 
 import com.courseoutlinemanager.common.ProcessString;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
-import com.courseoutlinemanager.course.Course;
 
 import java.util.ArrayList;
 
@@ -35,13 +34,5 @@ public class EducationalSystemManager {
 
     public ArrayList<EducationalSystem> getEducationalSystemList() {
         return this.educationalSystemList;
-    }
-
-    public boolean containsCourse(String typeOfSystem, Course course) throws NotFoundException {
-        return this.getEducationalSystem(typeOfSystem).containsCourse(course);
-    }  
-
-    public void addCourse(String typeOfSystem, Course course) throws NotFoundException {
-        this.getEducationalSystem(typeOfSystem).addCourse(course);
     }
 }

@@ -25,7 +25,7 @@ public class MainManager {
     }
 
     public void addCourseOutline() {
-        
+
     }
 
     public void run() {
@@ -34,7 +34,7 @@ public class MainManager {
             int choice = takeUserInput("your choice", 0, 9);
             switch (choice) {
                 case 1 -> {
-                    createCourse(eSM, cM, kBM);
+                    
                 }
                 case 2 -> {
 

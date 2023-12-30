@@ -16,12 +16,11 @@ public class CourseManager {
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 
-    public Course getCourseIfItExist(Course course) throws NotFoundException{
-        for(Course c : courseList){
-            if(course.equals(c))
-                return c;
-        }
-        throw new NotFoundException(String.format("Couldn't find %s(%s)!",course.getCourseName(),course.getCourseCode()));
+    public Course getCourse(Course toFind) throws NotFoundException{
+        int index = this.courseList.indexOf(toFind);
+        if(index == -1)
+            throw new NotFoundException("Couldn't find " + toFind.toString());
+        return this.courseList.get(index);
     }
 
     public boolean containsCourse(Course course) {

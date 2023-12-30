@@ -2,7 +2,7 @@ package com.courseoutlinemanager.courseoutline;
 
 import com.courseoutlinemanager.lecturer.Lecturer;
 import com.courseoutlinemanager.course.Course;
-
+import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.assessment.*;
 import com.courseoutlinemanager.common.customexception.*;
 
@@ -28,6 +28,8 @@ public class CourseOutline {
 
 	private ArrayList<Assessment> grades;
 
+	private EducationalSystem educationalSystem;
+
 	public CourseOutline() {
 		this.courseObjectives = new ArrayList<>();
 		this.learningOutcomes = new ArrayList<>();
@@ -35,8 +37,9 @@ public class CourseOutline {
 		this.grades = new ArrayList<>();
 	}
 
-	public CourseOutline(Course course) {
+	public CourseOutline(Course course, EducationalSystem e) {
 		this.course = course;
+		this.educationalSystem = e;
 	}
 
 	public CourseOutline(Course course, Lecturer compiler) {
@@ -44,11 +47,10 @@ public class CourseOutline {
 		this.compiler = compiler;
 	}
 
-	public CourseOutline(Course course, Lecturer compiler, ArrayList<Assessment> grades) {
-		this.course = course;
-		this.compiler = compiler;
-		this.grades = new ArrayList<>();
-	}
+	public CourseOutline(Course course, Lecturer compiler, EducationalSystem e) {
+		this(course, compiler);
+		this.educationalSystem = e;
+	} 
 
 	public Course getCourse() {
 		return this.course;
@@ -72,6 +74,14 @@ public class CourseOutline {
 
 	public ArrayList<Assessment> getGrades() {
 		return this.grades;
+	}
+
+	public EducationalSystem getEducationalSystem() {
+		return this.educationalSystem;
+	}
+
+	public void setEducationalSystem(EducationalSystem e) {
+		this.educationalSystem = e;
 	}
 
 	public boolean hasEnoughGrades() {
@@ -123,15 +133,18 @@ public class CourseOutline {
 		}
 	}
 
-
-
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) 
+		if (this == o)
 			return true;
 		if (o == null || this.getClass() != o.getClass())
 			return false;
 		CourseOutline outline = (CourseOutline) o;
-		return this.course.equals(outline.course) && this.compiler.equals(outline.compiler);
+		return this.course.equals(outline.course) && this.educationalSystem.equals(outline.educationalSystem);
+	}
+
+	@Override 
+	public String toString() {
+		return this.course.toString() + "_" + this.educationalSystem.getTypeName();
 	}
 }

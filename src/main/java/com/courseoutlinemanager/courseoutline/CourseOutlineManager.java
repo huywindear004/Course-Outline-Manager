@@ -13,7 +13,7 @@ public class CourseOutlineManager {
     public void addCourseOutline(CourseOutline newCourseOutline) throws AlreadyExistException {
         for (CourseOutline outLine : courseOutlineList) {
             if (outLine.equals(newCourseOutline)) {
-                throw new AlreadyExistException("CourseOutline already exists");
+                throw new AlreadyExistException(newCourseOutline.toString() + " already existed");
             }
         }
         courseOutlineList.add(newCourseOutline);
@@ -26,17 +26,10 @@ public class CourseOutlineManager {
         }
     }
 
-    public void deleteCourseOutline(String nameOutLine) throws NotFoundException {
-        boolean removed = courseOutlineList.removeIf(outline -> outline.getCourse().getCourseName().equals(nameOutLine));
-        if (!removed) {
-            throw new NotFoundException("Course outline not found");
-        }
-    }
-
     public ArrayList<CourseOutline> findCourseOutline(String nameorCode) {
         return this.courseOutlineList.stream()
-                .filter(outLine -> ProcessString.equalsByAlphabet(outLine.getCourse().getCourseName(),
-                        nameorCode) || ProcessString.equalsByAlphabet(outLine.getCourse().getCourseCode(), nameorCode))
+                .filter(outLine -> ProcessString.equalsByAlphabet(outLine.getCourse().getCourseName(), nameorCode)
+                        || ProcessString.equalsByAlphabet(outLine.getCourse().getCourseCode(), nameorCode))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

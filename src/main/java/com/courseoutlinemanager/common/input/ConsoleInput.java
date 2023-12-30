@@ -28,31 +28,7 @@ public class ConsoleInput {
         System.out.print("Enter course name: ");
         Course newCourse = new Course(sc.nextLine());
 
-        ArrayList<String> educationalSystemsMenu = new ArrayList<>();
-        for (EducationalSystem i : eSM.getEducationalSystemList()) {
-            educationalSystemsMenu.add(i.getTypeName());
-        }
-        educationalSystemsMenu.add("All.");
-        printChoiceMenu("Choose educational system to which course belongs", educationalSystemsMenu);
-        int choice = takeUserInput("your choice", 0, 3);
-        ArrayList<EducationalSystem> educationalSystems = new ArrayList<>(); 
-        try {//ê ngủ mai làm tiếp 
-            switch (choice) {
-                case 1 -> {
-                    educationalSystems.add(eSM.getEducationalSystem("Formal education"));
-                }
-                case 2 -> {
-                    educationalSystems.add(eSM.getEducationalSystem("Transfer education"));
-                }
-                case 3 -> {
-                    educationalSystems.add(eSM.getEducationalSystem("Formal education"));
-                    educationalSystems.add(eSM.getEducationalSystem("Transfer education"));
-                } // thay dc r
-            }
-        } catch (NotFoundException e) {
-            System.out.println(e.getMessage());
-        }
-        newCourse.setEducationalSystem(educationalSystems);
+
 
         return newCourse;
     }

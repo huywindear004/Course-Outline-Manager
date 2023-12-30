@@ -26,7 +26,7 @@ public class Lecturer {
 	}
 
 	//Prevent assign id manually
-	private Lecturer(String name, String id) {
+	public Lecturer(String name, String id) {
 		this.lecturerName = name;
 		this.lecturerId = id;
 	}
@@ -81,8 +81,6 @@ public class Lecturer {
 		if (o == null || this.getClass() != o.getClass())
 			return false;
 		Lecturer lecturer = (Lecturer) o;
-		return ProcessString.equalsByAlphabet(this.lecturerId, lecturer.lecturerId)
-		|| ProcessString.equalsByAlphabet(this.lecturerName, lecturer.lecturerName);
+		return ProcessString.equalsByAlphabet(this.lecturerId, lecturer.lecturerId);
 	}
 }
- 

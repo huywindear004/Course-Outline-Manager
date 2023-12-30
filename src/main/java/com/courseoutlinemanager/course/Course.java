@@ -16,8 +16,6 @@ import java.util.stream.Collectors;
 public class Course {
 	private static int courseCodeCount = 1;
 
-	private static int MAX_OUTLINES = 1;
-
 	private String courseCode;
 
 	private String courseName;
@@ -28,14 +26,11 @@ public class Course {
 
 	private KnowledgeBlock knowledgeBlock;
 
-	private ArrayList<EducationalSystem> educationalSystem;
-
 	private ArrayList<CourseOutline> courseOutlines;
 
 	private ArrayList<CourseCondition> requirements;
 	
 	public Course() {	
-		this.educationalSystem = new ArrayList<>();
 		this.courseOutlines = new ArrayList<>();
 		this.requirements = new ArrayList<>();
 		//add previousCourses and PrerequisiteCourses initially
@@ -59,21 +54,6 @@ public class Course {
 		this.courseCode = courseCode;
 		this.courseName = courseName;
 	}	
-
-	public Course(String courseCode, String courseName, String courseDescription, int courseCredits) {
-		this.courseCode = courseCode;
-		this.courseName = courseName;
-		this.courseDescription = courseDescription;
-		this.courseCredits = courseCredits;
-	}
-
-	public Course(String courseCode, String courseName, ArrayList<EducationalSystem> educationalSystems, KnowledgeBlock block, int courseCredits) {
-		this.courseCode = courseCode;
-		this.courseName = courseName;
-		this.educationalSystem = educationalSystems;
-		this.knowledgeBlock = block;
-		this.courseCredits = courseCredits;
-	}
 
 	public String getCourseCode() {
 		return courseCode;
@@ -121,19 +101,26 @@ public class Course {
 	}
 
 
-	public void addCourseOutline(CourseOutline outline) throws OutOfCapacityException{
-		if(this.courseOutlines.size() >= MAX_OUTLINES)
-			throw new OutOfCapacityException(String.format("%s(%s)'s outline list is enough"));
-		this.courseOutlines.add(outline);
-	}
 
-	// =============================================================EDUCATIONAL SYSTEM=============================================================
-	public ArrayList<EducationalSystem> getEducationalSystem() {
-		return educationalSystem;
-	}
+	public void addCourseOutline(CourseOutline outline) throws AlreadyExistException {
 
-	public void setEducationalSystem(ArrayList<EducationalSystem> educationalSystem) {
-		this.educationalSystem = educationalSystem;
+	}
+	
+	public boolean isAvailForOutline(String type) {
+		EducationalSystem eSys = null; 
+		//Get type of educational system to which outline in this list belongs
+		for (CourseOutline outline : this.courseOutlines) {
+			if (ProcessString.equalsByAlphabet(type, outline.getEducationalSystem().getTypeName()))
+				eSys = outline.getEducationalSystem();
+		}
+		if(eSys == null)	
+			return true;
+		int count = 0;
+		for (CourseOutline outline : this.courseOutlines) {
+			if(outline.getEducationalSystem().equals(eSys))
+				count++;
+		}
+		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương vào 
 	}
 
 	// =============================================================REQUIREMENTS=============================================================
@@ -181,10 +168,16 @@ public class Course {
 	 */
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) return true;
-		if (o == null || this.getClass() != o.getClass()) return false;
+		if (this == o)
+			return true;
+		if (o == null || this.getClass() != o.getClass())
+			return false;
 		Course course = (Course) o;
-		return ProcessString.equalsByAlphabet(course.courseName, this.courseName)
-				&& ProcessString.equalsByAlphabet(course.courseCode, this.courseCode);
+		return ProcessString.equalsByAlphabet(course.courseCode, this.courseCode);
+	}
+
+	@Override
+	public String toString() {
+		return this.courseName + "(" + this.courseCode + ")";
 	}
 }
