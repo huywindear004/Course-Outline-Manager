@@ -28,14 +28,6 @@ public class LecturerManager {
         return this.lecturerList.get(index);
     }
 
-    /**
-     * Add lecturer to the list
-     * 
-     * @param lecturer
-     *                 Lecturer needs to be added
-     * @throws AlreadyExistException
-     *                               If that lecturer already in the list
-     */
     public void addLecturer(Lecturer lecturer) {
         lecturerList.add(lecturer);
     }

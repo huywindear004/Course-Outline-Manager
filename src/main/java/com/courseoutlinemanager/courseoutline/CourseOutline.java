@@ -6,6 +6,8 @@ import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.assessment.*;
 import com.courseoutlinemanager.common.customexception.*;
 
+import static com.courseoutlinemanager.common.output.ConsoleOutput.takeUserInput;
+
 import java.util.ArrayList;
 
 public class CourseOutline {
@@ -100,6 +102,17 @@ public class CourseOutline {
 		this.courseContent = content;
 	}
 
+	private void addGrade(Assessment a) throws OutOfCapacityException{
+		if (this.gradeList.size() >= MAX_GRADES)
+			throw new OutOfCapacityException("The number of grades is enough.");
+		double currTotalWeight = 0;
+		for (Assessment i : this.gradeList)
+			currTotalWeight += i.getWeight();
+		if (Double.compare(currTotalWeight + a.getWeight(), TOTAL_WEIGHT) > 0)
+			throw new OutOfCapacityException("The total weight should be less than 100%");
+		this.gradeList.add(a);
+	}
+
 	/**
 	 * Add new grade the the grade columns
 	 * 
@@ -114,26 +127,22 @@ public class CourseOutline {
 	 *                                weight would be greater than 100%
 	 */
 	public void addGrade(String type, String method, double weight) throws OutOfCapacityException {
-		if (this.gradeList.size() >= MAX_GRADES)
-			throw new OutOfCapacityException("The number of grades is enough.");
-		double currTotalWeight = 0;
-		for (Assessment i : this.gradeList)
-			currTotalWeight += i.getWeight();
-		if (Double.compare(currTotalWeight, TOTAL_WEIGHT) > 0
-				|| Double.compare(currTotalWeight + weight, TOTAL_WEIGHT) > 0)
-			throw new OutOfCapacityException("The total weight should be less than 100%");
-		this.gradeList.add(new Assessment(type, method, weight));
+		this.addGrade(new Assessment(type, method, weight));
 	}
 
 	public void addGrade(String type, String method, double weight, String content) throws OutOfCapacityException {
-		this.addGrade(type, method, weight);
+		this.addGrade(new Assessment(type, method, weight, content));
 	}
 
 	public void removeGrade(int position) {
-		if (position >= 0 && position < this.gradeList.size()) {
-			this.gradeList.remove(position);
+		if (position >= 1 && position < gradeList.size() - 1) {
+			gradeList.remove(position);
+			System.out.println("Grade at position " + position + " removed.");
+		} else {
+			System.out.println("Invalid position.");
 		}
-	}
+	} 
+	
 
 	@Override
 	public boolean equals(Object o) {

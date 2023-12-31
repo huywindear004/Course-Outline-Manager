@@ -91,7 +91,7 @@ public class ProcessString {
         else
             for (String line : strings)
                 temp.append(line + "\n");
-        return temp.toString();
+        return temp.toString().trim();
     }
     
     public static ArrayList<String> getFileNames(String path, String... excludedString) {

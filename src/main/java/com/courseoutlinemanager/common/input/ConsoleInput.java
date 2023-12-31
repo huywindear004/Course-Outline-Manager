@@ -1,19 +1,10 @@
 package com.courseoutlinemanager.common.input;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Scanner;
 
-import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.course.CourseManager;
-import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
-import com.courseoutlinemanager.courseoutline.CourseOutline;
-import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
-import com.courseoutlinemanager.educationalsystem.FormalEducation;
-import com.courseoutlinemanager.educationalsystem.TransferEducation;
 
 import static com.courseoutlinemanager.common.ProcessString.*;
 import static com.courseoutlinemanager.common.output.ConsoleOutput.*;

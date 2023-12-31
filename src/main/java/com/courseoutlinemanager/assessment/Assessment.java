@@ -20,6 +20,13 @@ public class Assessment {
 		this.weight = weight;
 		this.content = content;
 	}
+	
+
+	@Override
+	public String toString() {
+		return String.format("[Type: %s] [Method: %s] [Weight: %.1f%%] [Content: %s]", assessingType, assessingMethod,
+				weight * 100.0, content);  
+	}
 
 	public double getWeight() {
 		return this.weight;
@@ -61,5 +68,4 @@ public class Assessment {
 				this.assessingMethod = i;
 		}
 	}
-
 }

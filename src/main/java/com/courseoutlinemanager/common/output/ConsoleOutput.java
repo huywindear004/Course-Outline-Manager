@@ -24,13 +24,12 @@ public class ConsoleOutput {
 
     public static void printCourse(Course course) {
         System.out.println(printLabel("COURSE INFORMATION", "=", WIDTH));
-        
+
         System.out.println(printLine("1. Course Name: " + course.getCourseName(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("2. Course Code: " + course.getCourseCode(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("3. Knowledge block: " + course.getKnowledgeBlock(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLine("4. Credits: " + course.getCourseCredits(), 1, WIDTH, INDENT_SPACE));
-        System.out.println(printLine("5. Course Code: " + course.getCourseDescription(), 1, WIDTH, INDENT_SPACE));
-
+        System.out.println(printLine("5. Description: " + course.getCourseDescription(), 1, WIDTH, INDENT_SPACE));
         System.out.println(printLabel("", "=", WIDTH));
     }
 
@@ -98,32 +97,51 @@ public class ConsoleOutput {
                 "5. Find all courses which this course is part of it's requirements.",
                 "6. Sort course outline list.",
                 "7. Find the course outlines of a lecturer by Id.",
-                "8. Export a full course outline.",
+                "8. Export course outline.",
                 "9. Show statistic on the number of course outline by its number of credits"
         };
         printChoiceMenu("MAIN MENU", text);
     }
 
+    public static void printYesOrNo() {
+        String[] text = {
+            "1. Yes",
+            "2. No"
+        };
+        printChoiceMenu("", text);
+    }
+    public static void printEducation() {
+        String[] text = {
+            "1. FormalEducation",
+            "2. TransferEducation"
+        };
+        printChoiceMenu("", text);
+    }
+    public static void printRequirementList() {
+        String[] text = {
+            "1. PrerequisiteCourses",
+            "2. PreviousCourses"
+        };
+        printChoiceMenu("", text);
+    }
+
     public static void printExportMenu() {
         String[] text = {
-                "1. Export to console.",
-                "2. Export to .txt file."
+                "1. Export 1 outline to console.",
+                "2. Export 1 outline to .txt file.",
+                "3. Export all outline to .txt file."
         };
         printChoiceMenu("EXPORT COURSE OUTLINE", text);
     }
 
     public static void printEditOutlineMenu(CourseOutline outline) {
         String[] menu = {
-                "1. Course.",
-                "2. Course description.",
-                "3. Knowledge block.",
-                "4. Compiler.",
-                "5. Course Objectives.",
-                "6. Learning outcomes.",
-                "7. Course content.",
-                "8. Requirements.",
-                "9. Learning outcomes.",
-                "10. Grades."
+                "1. Course Objectives.",
+                "2. Learning outcomes.",
+                "3. Course content.",
+                "4. Prerequisite courses.",
+                "5. Previous courses.",
+                "6. Grades."
         };
         printChoiceMenu(
                 "EDIT " + outline.getCourse().getCourseName() + " (" + outline.getCourse().getCourseCode()

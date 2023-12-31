@@ -29,7 +29,7 @@ public class CourseManager {
 
     public void addCourse(Course newCourse) {
         courseList.add(newCourse);
-    }
+    }   
 
     public boolean deleteCourse(Course deleteCourse) {
         return courseList.remove(deleteCourse);

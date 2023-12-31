@@ -21,6 +21,11 @@ public class Lecturer {
 		courseOutlineList = new ArrayList<>();
 	}
 
+	@Override
+	public String toString() {
+		return "Lecturer [lecturerName=" + lecturerName + ", lecturerId=" + lecturerId + "]";
+	}
+
 	public Lecturer(String name) {
 		this(name, String.format("LEC%05d", idCount++));
 	}

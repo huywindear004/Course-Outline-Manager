@@ -42,6 +42,7 @@ public class Course {
 	 * This constructor is for user input operation
 	 */
 	public Course(String courseName) {
+		this();
 		this.courseName = courseName;
 		this.courseCode = String.format("COUR%03d", courseCodeCount++);
 	}
@@ -52,6 +53,7 @@ public class Course {
 	 * các môn học khác)
 	 */
 	public Course(String courseCode, String courseName) {
+		this();
 		this.courseCode = courseCode;
 		this.courseName = courseName;
 	}
@@ -96,8 +98,7 @@ public class Course {
 		this.knowledgeBlock = knowledgeBlock;
 	}
 
-	// =============================================================COURSE
-	// OUTLINE=============================================================
+	// =============================================================COURSE OUTLINE=============================================================
 	public ArrayList<CourseOutline> getCourseOutlineList() {
 		return this.courseOutlineList;
 	}
@@ -139,9 +140,9 @@ public class Course {
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	public void setRequirementList(ArrayList<CourseCondition> requirements) {
-		this.requirementList = requirements;
-	}
+	// public void setRequirementList(ArrayList<CourseCondition> requirements) {
+	// 	this.requirementList = requirements;
+	// }
 
 	/**
 	 * Add course to list.
@@ -157,13 +158,22 @@ public class Course {
 	 *                                If there is the equivalent course in the
 	 *                                requirement.
 	 */
-	public void addCourseRequirements(String typeOfRequirement, Course course)
-			throws OutOfCapacityException {
+	public void addCourseToRequirementList(String typeOfRequirement, Course toBeAdded)
+			throws OutOfCapacityException, AlreadyExistException {
+		if(toBeAdded.equals(this))
+			throw new AlreadyExistException("Duplicate course code " + this + " " + toBeAdded);
 		for (CourseCondition i : this.requirementList)
 			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
-				i.addCourse(course);
+				i.addCourse(toBeAdded);
 	}
 
+
+	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete){
+		for (CourseCondition i : this.requirementList)
+			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
+				return i.removeCourse(toDelete);
+		return false;
+	}
 
 	public void showRequirementList() {
 		

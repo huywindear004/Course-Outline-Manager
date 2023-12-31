@@ -1,27 +1,15 @@
 ===============================================Nhap đề cương mới===================================================
-1. Nhập newLecturer(tên, id) ---- thử xem giảng viên đã tồn tại chưa. nếu chưa
-                                 thêm giảng viên vào trong lecturerManager
-
-    /*
-        -Một giảng viên có thể trùng tên chứ không thể trùng id
-    */
-
-    try
-        tempLecturer = LecturerManager.getLecturer(newLecturer);
-        
-        // đã tìm thấy người cùng id -> thông báo rằng sẽ lấy người có trước
-        #if( equalsByAlphabet(tempLecturer.name, newLecturer.name) )
-            -> SOUT("Trùng id. Sẽ tự động lấy giảng viên đã tồn tại.")
-            newLecturer = tempLecturer
+1. Nhập mã giảng viên ---- newLecturer
+    try{
+        newLecturer = Lecturermanager.findLecturerById(id);
+    }catch(NotFoundException){
+        Thông báo ko tìm thấy
+        Hỏi có muôn tạo giảng viên không?
+        choice = takeUserinput();
+        IF(Có) -> Nhập tên, sau đó in ra thông tin giảng viên, Lecturermanager.add();
+        if(không) -> lặp lại bước 1
+    }
     
-    //không tìm thấy 
-    catch(NotFoundException)
-        -> hỏi người dùng có muốn thêm vào danh sách giảng viên không? 
-        if(không)
-            ->lặp lại bước 1
-        else
-            -> lecturerManager.addLEcturer(newLecturer)
-
     // kiểm tra xem giới hạn tạo đề cương của giảng viên này 
     if(newLecturer.hasEnoughOutlines() == true) 
         ->SOUT("Giảng viên này đã tối đa lần tạo đề cương")
@@ -45,6 +33,7 @@ ITP(0004)
             nếu không -> lặp lại bước 2
             nếu có  ->  {
 
+       
                 courseManager.addCourse(newCourse)
             } 
                 
@@ -116,7 +105,6 @@ MENU(3):             |
                                                 "5. Learning outcomes.",
                                                 "6. Course content.",
                                                 "7. Requirements.",
-                                                "8. Learning outcomes.",
                                                 "9. Grades."
 Nhập mã giảng viên ---- 
 
@@ -127,8 +115,35 @@ i.
 Cập nhập thông tin đề cương
 - Sửa nội dung
     outline.setCourseContent(ArrayList<String> content)
+    
 -thêm/xoá môn tiên quyết, môn học trước vào một đề cương
-    outline.course.
+    -menu
+    ----------------
+    1. môn học tiên quyêt
+        1. thêm
+        2. xoá
+        -nhập lựa chon: choose  
+        switch(choose)
+            1. -> nhập tên, mã môn học
+                type = PrerequisiteCourse
+                course.addCourseToRequirementList(type, toBeAdded)
+            2. -> nhập tên, mã môn học
+                type = PrerequisiteCourse
+                course.removeCourseOfRequirementList(type, toBeDeleted)
+                
+    2. môn học trước    
+        -thêm 
+        -xoá
+        -nhập lựa chon: choose  
+        switch(choose)
+            1. -> nhập tên, mã môn học
+                type = PreviousCourses
+                course.addCourseToRequirementList(type, toBeAdded)
+            2. -> nhập tên, mã môn học
+                type = PreviousCourses
+                course.removeCourseToRequirementList(type, toBeDeteted)
+                
+    
 -thêm/xoá hình thức đánh giá vào một đề cương.
 
 
