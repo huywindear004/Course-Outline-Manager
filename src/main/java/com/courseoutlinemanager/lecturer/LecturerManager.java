@@ -18,10 +18,6 @@ public class LecturerManager {
         return lecturers;
     }
 
-    public void setLecturers(ArrayList<Lecturer> lecturers) {
-        this.lecturers = lecturers;
-    }
-
     public Lecturer getLecturer(Lecturer lect) throws NotFoundException{
         int index = this.lecturers.indexOf(lect);
         if(index == -1)
