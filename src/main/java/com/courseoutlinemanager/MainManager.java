@@ -1,13 +1,11 @@
 package com.courseoutlinemanager;
 
 import com.courseoutlinemanager.course.CourseManager;
-import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
 import com.courseoutlinemanager.courseoutline.CourseOutlineManager;
 import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
-import com.courseoutlinemanager.lecturer.LecturerManager;
+
 import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
 import static com.courseoutlinemanager.common.ProcessString.*;
-import static com.courseoutlinemanager.common.input.ConsoleInput.*;
 
 public class MainManager {
     private LecturerManager lM;
