@@ -1,6 +1,11 @@
 ===============================================Nhap đề cương mới===================================================
 1. Nhập newLecturer(tên, id) ---- thử xem giảng viên đã tồn tại chưa. nếu chưa
                                  thêm giảng viên vào trong lecturerManager
+
+    /*
+        -Một giảng viên có thể trùng tên chứ không thể trùng id
+    */
+
     try
         tempLecturer = LecturerManager.getLecturer(newLecturer);
         
@@ -17,6 +22,7 @@
         else
             -> lecturerManager.addLEcturer(newLecturer)
 
+    // kiểm tra xem giới hạn tạo đề cương của giảng viên này 
     if(newLecturer.hasEnoughOutlines() == true) 
         ->SOUT("Giảng viên này đã tối đa lần tạo đề cương")
         ->lặp lại bước 1
@@ -31,7 +37,7 @@ PT(0002),
 ITP(0004)
 -> bắt nhập lại 
 
-2. Nhập newCourse (tên môn hoặc mã môn)	----listCourse =  findCourse() thử xem môn học đã tồn tại chưa. nếu chưa thì hỏi xem có thêm ko
+2. Nhập newCourse (tên môn hoặc mã môn)	----listCourse =>  findCourse() thử xem môn học đã tồn tại chưa. nếu chưa thì hỏi xem có thêm ko
                                    trả về list nếu listCourse.size() = 1 -> tự gán 
                                                 nếu list.size() > 1 -> in ra xong lặp lai bước 2
     if(listCourse.isEmpty())
@@ -52,16 +58,16 @@ ITP(0004)
 
     ######(newCourse lúc này đã tham chiếu đến môn học có sẵn. hoặc là môn học mới)######
 
---------------------
-MENU(3):
-1. Chinh quy
-2. Lien thong
-0. Thoat
+----------------------
+MENU(3):             |
+1. Chinh quy         |
+2. Lien thong        |   
+0. Thoat             |    
 ---------------------- 
 
 3. Nhập hệ đào tạo ---- (Thuộc 1 đề cương) nếu môn học này đã có đủ đề cương của hệ đào tạo thì sẽ in ra menu 
                                             chưa thì thêm vào courseOutlineManager  , newCourse.courseOutlines[];
-                                            thêm hđt vào outline bằng EducationalSystemManager.getEducationalSystem();
+                                            thêm hđt vào outline bằng EducationalSystemManager.getEducationalSystem(type);
     
 	EducationalSystem e;
 
@@ -74,9 +80,14 @@ MENU(3):
                 e = EducationalSystemManager.getEducationalSystem("Lien thong")
 
             //kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
-            if(!newCourse.isAvailForOutline("Chinh quy || Lien thong"))
+            if( !(newCourse.isAvailForOutline("Chinh quy || Lien thong")) )
                 SOUT("Môn học đã có đề cương của hệ đào tạo ...")
-            ->Lặp lại bước 3
+                ->Lặp lại bước 3
+            else{
+                // môn học này chưa có đề cương của hệ đào tạo
+                thêm các thông tin còn lại của môn học
+            }
+
             
             newOutLine = new CourseOutline(newCourse, newLecturer, e);
             courseOutlineManager.addOutline(newOutline)  // thêm đề cương này vào danh sách quản lý đề cương
@@ -111,7 +122,14 @@ Nhập mã giảng viên ----
 
 i. 
 
-    
+
+
+Cập nhập thông tin đề cương
+- Sửa nội dung
+    outline.setCourseContent(ArrayList<String> content)
+-thêm/xoá môn tiên quyết, môn học trước vào một đề cương
+    outline.course.
+-thêm/xoá hình thức đánh giá vào một đề cương.
 
 
 

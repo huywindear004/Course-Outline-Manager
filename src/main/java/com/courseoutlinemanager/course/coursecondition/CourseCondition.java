@@ -7,14 +7,14 @@ import com.courseoutlinemanager.course.Course;
 import java.util.ArrayList;
 
 public abstract class CourseCondition {
-    private ArrayList<Course> courses; 
+    private ArrayList<Course> courseList;
 
     public abstract String getTypeName();
 
     public abstract int getMAX_COURSES();
 
     public CourseCondition() {
-        courses = new ArrayList<>();
+        courseList = new ArrayList<>();
     }
 
     /**
@@ -28,30 +28,35 @@ public abstract class CourseCondition {
     public CourseCondition(ArrayList<Course> courses) throws OutOfCapacityException {
         if (courses.size() > this.getMAX_COURSES())
             throw new OutOfCapacityException();
-        this.courses = courses;
+        this.courseList = courses;
     }
 
-    private Course getCourseIfItExist(Course course) throws NotFoundException{
-        for (Course c : courses) {
+    private Course getCourseIfItExist(Course course) throws NotFoundException {
+        for (Course c : courseList) {
             if (course.equals(c))
                 return c;
         }
         throw new NotFoundException();
     }
+
     /**
-     * Add course to list. If the toBeAddedCourse is already in the requirement, then 
+     * Add course to list. If the toBeAddedCourse is already in the requirement,
+     * then
      * assign the existedCourse to the toBeAddedCourse.
+     * 
      * @param course
      *               Given course
      * @throws OutOfCapacityException
      *                                If the list is enough of elements.
      */
-    public void addCourse(Course course) throws OutOfCapacityException{
-        try{course = this.getCourseIfItExist(course);
-        } catch (NotFoundException ignored) {}
-        if (this.courses.size() >= this.getMAX_COURSES())
-            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!",getTypeName()));
-        this.courses.add(course);
+    public void addCourse(Course course) throws OutOfCapacityException {
+        try {
+            course = this.getCourseIfItExist(course);
+        } catch (NotFoundException ignored) {
+        }
+        if (this.courseList.size() >= this.getMAX_COURSES())
+            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!", getTypeName()));
+        this.courseList.add(course);
     }
 
     /**
@@ -64,11 +69,11 @@ public abstract class CourseCondition {
      *         True if the given course is present
      */
     public boolean removeCourse(Course course) {
-        return this.courses.remove(course);
+        return this.courseList.remove(course);
     }
 
     public int size() {
-        return this.courses.size();
+        return this.courseList.size();
     }
 
     /**
@@ -80,10 +85,10 @@ public abstract class CourseCondition {
      *         True if this list contains the specified course
      */
     public boolean contains(Course course) {
-        return this.courses.contains(course);
+        return this.courseList.contains(course);
     }
 
-    public ArrayList<Course> getCourses() {
-        return this.courses;
+    public ArrayList<Course> getCourseList() {
+        return this.courseList;
     }
 }

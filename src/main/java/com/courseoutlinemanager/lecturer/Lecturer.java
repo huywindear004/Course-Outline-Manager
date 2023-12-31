@@ -15,17 +15,17 @@ public class Lecturer {
 
 	private String lecturerId;
 
-	private ArrayList<CourseOutline> courseOutlines;
+	private ArrayList<CourseOutline> courseOutlineList;
 
 	public Lecturer() {
-		courseOutlines = new ArrayList<>();
+		courseOutlineList = new ArrayList<>();
 	}
 
 	public Lecturer(String name) {
 		this(name, String.format("LEC%05d", idCount++));
 	}
 
-	//Prevent assign id manually
+	// Prevent assign id manually
 	public Lecturer(String name, String id) {
 		this.lecturerName = name;
 		this.lecturerId = id;
@@ -39,16 +39,16 @@ public class Lecturer {
 		return this.lecturerId;
 	}
 
-	public ArrayList<CourseOutline> getCourseOutlines() {
-		return this.courseOutlines;
+	public ArrayList<CourseOutline> getCourseOutlineList() {
+		return this.courseOutlineList;
 	}
 
 	public void addCourseOutline(CourseOutline outline) throws OutOfCapacityException, AlreadyExistException {
 		if (this.hasEnoughCourseOutlines())
 			throw new OutOfCapacityException("This lecturer has had enough courseoutlines.");
-		if (this.courseOutlines.contains(outline))
-			throw new AlreadyExistException("This outline is already possessed by "+lecturerName+".");
-		this.courseOutlines.add(outline);
+		if (this.courseOutlineList.contains(outline))
+			throw new AlreadyExistException("This outline is already possessed by " + lecturerName + ".");
+		this.courseOutlineList.add(outline);
 	}
 
 	public boolean hasEnoughCourseOutlines() {
@@ -56,27 +56,27 @@ public class Lecturer {
 	}
 
 	public void removeCourseOutline(CourseOutline outline) {
-		this.courseOutlines.remove(outline);
+		this.courseOutlineList.remove(outline);
 	}
 
 	public void removeCourseOutline(String outlineName) {
-		this.courseOutlines
+		this.courseOutlineList
 				.removeIf(outline -> ProcessString.equalsByAlphabet(outlineName, outline.getCourse().getCourseName()));
 	}
 
 	public boolean contains(CourseOutline outline) {
-		if (this.courseOutlines.contains(outline))
+		if (this.courseOutlineList.contains(outline))
 			return true;
 		return false;
 	}
 
 	public int getCourseOutlinesNum() {
-		return this.courseOutlines.size();
+		return this.courseOutlineList.size();
 	}
 
 	@Override
 	public boolean equals(Object o) {
-		if (this == o) 
+		if (this == o)
 			return true;
 		if (o == null || this.getClass() != o.getClass())
 			return false;

@@ -20,21 +20,21 @@ public class CourseOutline {
 
 	private Lecturer compiler;
 
-	private ArrayList<String> courseObjectives;
+	private ArrayList<String> courseObjectiveList;
 
-	private ArrayList<String> learningOutcomes;
+	private ArrayList<String> learningOutcomeList;
 
 	private ArrayList<String> courseContent;
 
-	private ArrayList<Assessment> grades;
+	private ArrayList<Assessment> gradeList;
 
 	private EducationalSystem educationalSystem;
 
 	public CourseOutline() {
-		this.courseObjectives = new ArrayList<>();
-		this.learningOutcomes = new ArrayList<>();
+		this.courseObjectiveList = new ArrayList<>();
+		this.learningOutcomeList = new ArrayList<>();
 		this.courseContent = new ArrayList<>();
-		this.grades = new ArrayList<>();
+		this.gradeList = new ArrayList<>();
 	}
 
 	public CourseOutline(Course course, EducationalSystem e) {
@@ -50,18 +50,18 @@ public class CourseOutline {
 	public CourseOutline(Course course, Lecturer compiler, EducationalSystem e) {
 		this(course, compiler);
 		this.educationalSystem = e;
-	} 
+	}
 
 	public Course getCourse() {
 		return this.course;
 	}
 
-	public ArrayList<String> getCourseObjectives() {
-		return this.courseObjectives;
+	public ArrayList<String> getCourseObjectiveList() {
+		return this.courseObjectiveList;
 	}
 
-	public ArrayList<String> getLearningOutcomes() {
-		return this.learningOutcomes;
+	public ArrayList<String> getLearningOutcomeList() {
+		return this.learningOutcomeList;
 	}
 
 	public ArrayList<String> getCourseContent() {
@@ -72,8 +72,8 @@ public class CourseOutline {
 		return this.compiler;
 	}
 
-	public ArrayList<Assessment> getGrades() {
-		return this.grades;
+	public ArrayList<Assessment> getGradeList() {
+		return this.gradeList;
 	}
 
 	public EducationalSystem getEducationalSystem() {
@@ -85,15 +85,15 @@ public class CourseOutline {
 	}
 
 	public boolean hasEnoughGrades() {
-		return this.grades.size() >= MIN_GRADES && this.grades.size() <= MAX_GRADES;
+		return this.gradeList.size() >= MIN_GRADES && this.gradeList.size() <= MAX_GRADES;
 	}
 
-	public void setCourseObjectives(ArrayList<String> objectives) {
-		this.courseObjectives = objectives;
+	public void setCourseObjectiveList(ArrayList<String> objectives) {
+		this.courseObjectiveList = objectives;
 	}
 
-	public void setLearningOutcomes(ArrayList<String> outcomes) {
-		this.learningOutcomes = outcomes;
+	public void setLearningOutcomeList(ArrayList<String> outcomes) {
+		this.learningOutcomeList = outcomes;
 	}
 
 	public void setCourseContent(ArrayList<String> content) {
@@ -102,25 +102,27 @@ public class CourseOutline {
 
 	/**
 	 * Add new grade the the grade columns
+	 * 
 	 * @param type
-	 * Type of assessments
+	 *               Type of assessments
 	 * @param method
-	 * Method of assessments
+	 *               Method of assessments
 	 * @param weight
-	 * Weight (ratio) of this assessment
+	 *               Weight (ratio) of this assessment
 	 * @throws OutOfCapacityException
-	 * If the number of grades is enough or the total weight would be greater than 100%
+	 *                                If the number of grades is enough or the total
+	 *                                weight would be greater than 100%
 	 */
 	public void addGrade(String type, String method, double weight) throws OutOfCapacityException {
-		if (this.grades.size() >= MAX_GRADES)
+		if (this.gradeList.size() >= MAX_GRADES)
 			throw new OutOfCapacityException("The number of grades is enough.");
 		double currTotalWeight = 0;
-		for (Assessment i : this.grades)
+		for (Assessment i : this.gradeList)
 			currTotalWeight += i.getWeight();
 		if (Double.compare(currTotalWeight, TOTAL_WEIGHT) > 0
 				|| Double.compare(currTotalWeight + weight, TOTAL_WEIGHT) > 0)
 			throw new OutOfCapacityException("The total weight should be less than 100%");
-		this.grades.add(new Assessment(type, method, weight));
+		this.gradeList.add(new Assessment(type, method, weight));
 	}
 
 	public void addGrade(String type, String method, double weight, String content) throws OutOfCapacityException {
@@ -128,8 +130,8 @@ public class CourseOutline {
 	}
 
 	public void removeGrade(int position) {
-		if (position >= 0 && position < this.grades.size()) {
-			this.grades.remove(position);
+		if (position >= 0 && position < this.gradeList.size()) {
+			this.gradeList.remove(position);
 		}
 	}
 
@@ -143,7 +145,7 @@ public class CourseOutline {
 		return this.course.equals(outline.course) && this.educationalSystem.equals(outline.educationalSystem);
 	}
 
-	@Override 
+	@Override
 	public String toString() {
 		return this.course.toString() + "_" + this.educationalSystem.getTypeName();
 	}

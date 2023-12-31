@@ -1,7 +1,7 @@
 package com.courseoutlinemanager;
 
 import com.courseoutlinemanager.course.CourseManager;
-import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlockManager;
+import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
 import com.courseoutlinemanager.courseoutline.CourseOutlineManager;
 import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
 import com.courseoutlinemanager.lecturer.LecturerManager;
@@ -14,14 +14,12 @@ public class MainManager {
     private CourseOutlineManager cOM;
     private CourseManager cM;
     private EducationalSystemManager eSM;
-    private KnowledgeBlockManager kBM;
 
     public MainManager() {
         lM = new LecturerManager();
         cOM = new CourseOutlineManager();
         cM = new CourseManager();
         eSM = new EducationalSystemManager();
-        kBM = new KnowledgeBlockManager();
     }
 
     public void addCourseOutline() {

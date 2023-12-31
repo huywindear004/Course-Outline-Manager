@@ -1,4 +1,4 @@
-CourseCode: COUR001
+CourseCode: COUR002
 CourseName: OOP
 KnowledgeBlock: Discipline
 Credits: 4

@@ -24,18 +24,18 @@ public class Course {
 
 	private int courseCredits;
 
-	private KnowledgeBlock knowledgeBlock;
+	private KnowledgeBlock knowledgeBlock = KnowledgeBlock.NULL;
 
-	private ArrayList<CourseOutline> courseOutlines;
+	private ArrayList<CourseOutline> courseOutlineList;
 
-	private ArrayList<CourseCondition> requirements;
-	
-	public Course() {	
-		this.courseOutlines = new ArrayList<>();
-		this.requirements = new ArrayList<>();
-		//add previousCourses and PrerequisiteCourses initially
-		this.requirements.add(new PreviousCourses());
-		this.requirements.add(new PrerequisiteCourses());
+	private ArrayList<CourseCondition> requirementList;
+
+	public Course() {
+		this.courseOutlineList = new ArrayList<>();
+		this.requirementList = new ArrayList<>();
+		// add previousCourses and PrerequisiteCourses initially
+		this.requirementList.add(new PreviousCourses());
+		this.requirementList.add(new PrerequisiteCourses());
 	}
 
 	/**
@@ -48,12 +48,13 @@ public class Course {
 
 	/**
 	 * This constructor just only for compare operation between courses
-	 * (Hàm khởi tạo 2 tham số này chỉ dành cho việc tạo môn học mới để so sánh với các môn học khác)
+	 * (Hàm khởi tạo 2 tham số này chỉ dành cho việc tạo môn học mới để so sánh với
+	 * các môn học khác)
 	 */
 	public Course(String courseCode, String courseName) {
 		this.courseCode = courseCode;
 		this.courseName = courseName;
-	}	
+	}
 
 	public String getCourseCode() {
 		return courseCode;
@@ -95,76 +96,86 @@ public class Course {
 		this.knowledgeBlock = knowledgeBlock;
 	}
 
-	// =============================================================COURSE OUTLINE=============================================================
-	public ArrayList<CourseOutline> getCourseOutlines() {
-		return this.courseOutlines;
+	// =============================================================COURSE
+	// OUTLINE=============================================================
+	public ArrayList<CourseOutline> getCourseOutlineList() {
+		return this.courseOutlineList;
 	}
-
-
 
 	public void addCourseOutline(CourseOutline outline) throws AlreadyExistException {
 
 	}
-	
+
+
+	//kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
 	public boolean isAvailForOutline(String type) {
-		EducationalSystem eSys = null; 
-		//Get type of educational system to which outline in this list belongs
-		for (CourseOutline outline : this.courseOutlines) {
+		EducationalSystem eSys = null;
+		// Get type of educational system to which outline in this list belongs
+		for (CourseOutline outline : this.courseOutlineList) {
 			if (ProcessString.equalsByAlphabet(type, outline.getEducationalSystem().getTypeName()))
 				eSys = outline.getEducationalSystem();
 		}
-		if(eSys == null)	
+		if (eSys == null)
 			return true;
 		int count = 0;
-		for (CourseOutline outline : this.courseOutlines) {
-			if(outline.getEducationalSystem().equals(eSys))
+		for (CourseOutline outline : this.courseOutlineList) {
+			if (outline.getEducationalSystem().equals(eSys))
 				count++;
 		}
-		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương vào 
+		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương
 	}
 
 	// =============================================================REQUIREMENTS=============================================================
-	public ArrayList<CourseCondition> getRequirements() {
-		return requirements;
+	public ArrayList<CourseCondition> getRequirementList() {
+		return requirementList;
 	}
 
 	/**
 	 * Return the required course list
 	 */
 	public ArrayList<CourseCondition> getRequirements(String typeOfRequirement) {
-		return this.requirements.stream()
-                .filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
+		return this.requirementList.stream()
+				.filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
 				.collect(Collectors.toCollection(ArrayList::new));
 	}
 
-	public void setRequirements(ArrayList<CourseCondition> requirements) {
-		this.requirements = requirements;
+	public void setRequirementList(ArrayList<CourseCondition> requirements) {
+		this.requirementList = requirements;
 	}
 
 	/**
 	 * Add course to list.
+	 * 
 	 * @param typeOfRequirement
-	 * Type of the requirement that the course needs to be added to
+	 *                          Type of the requirement that the course needs to be
+	 *                          added to
 	 * @param course
-	 * Course that needs to be added
+	 *                          Course that needs to be added
 	 * @throws OutOfCapacityException
-	 * If the requirement is enough of elements.
+	 *                                If the requirement is enough of elements.
 	 * @throws AlreadyExistException
-	 * If there is the equivalent course in the requirement.
+	 *                                If there is the equivalent course in the
+	 *                                requirement.
 	 */
 	public void addCourseRequirements(String typeOfRequirement, Course course)
-	throws OutOfCapacityException {
-		for(CourseCondition i : this.requirements)
-			if(ProcessString.equalsByAlphabet(i.getTypeName(),typeOfRequirement))
+			throws OutOfCapacityException {
+		for (CourseCondition i : this.requirementList)
+			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
 				i.addCourse(course);
 	}
-	
+
+
+	public void showRequirementList() {
+		
+	}
+
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.
+	 * 
 	 * @param o
-	 * Given object
+	 *          Given object
 	 * @return
-	 * True if courseCode and courseName is the same
+	 *         True if courseCode and courseName is the same
 	 */
 	@Override
 	public boolean equals(Object o) {
