@@ -4,32 +4,34 @@ import java.util.ArrayList;
 import java.util.stream.Collectors;
 
 import com.courseoutlinemanager.common.ProcessString;
-import com.courseoutlinemanager.common.customexception.AlreadyExistException;
-import com.courseoutlinemanager.common.customexception.NotFoundException;
 
 public class CourseOutlineManager {
-    private ArrayList<CourseOutline> courseOutlineList = new ArrayList<>();
+    private ArrayList<CourseOutline> courseOutlineList;
 
-    public void addCourseOutline(CourseOutline newCourseOutline) throws AlreadyExistException {
-        for (CourseOutline outLine : courseOutlineList) {
-            if (outLine.equals(newCourseOutline)) {
-                throw new AlreadyExistException(newCourseOutline.toString() + " already existed");
-            }
-        }
-        courseOutlineList.add(newCourseOutline);
+    public CourseOutlineManager() {
+        courseOutlineList = new ArrayList<>();
     }
 
-    public void deleteCourseOutline(CourseOutline deleteCourseOutline) throws NotFoundException {
-        boolean removed = courseOutlineList.removeIf(outline -> outline.equals(deleteCourseOutline));
-        if (!removed) {
-            throw new NotFoundException("Course outline not found");
-        }
+    public boolean addCourseOutline(CourseOutline newCourseOutline){
+        return courseOutlineList.add(newCourseOutline);
+    }
+
+    public int indexOfCourseOutline(CourseOutline outline) {
+        return this.courseOutlineList.indexOf(outline);
+    }
+
+    public boolean containsCourseOutline(CourseOutline outline) {
+        return this.courseOutlineList.contains(outline);
+    }
+
+    public boolean deleteCourseOutline(CourseOutline deleteCourseOutline){
+        return courseOutlineList.removeIf(outline -> outline.equals(deleteCourseOutline));
     }
 
     public ArrayList<CourseOutline> findCourseOutline(String nameorCode) {
         return this.courseOutlineList.stream()
-                .filter(outLine -> ProcessString.equalsByAlphabet(outLine.getCourse().getCourseName(), nameorCode)
-                        || ProcessString.equalsByAlphabet(outLine.getCourse().getCourseCode(), nameorCode))
+                .filter(outLine -> ProcessString.containsByAlphabet(outLine.getCourse().getCourseName(), nameorCode)
+                        || ProcessString.containsByAlphabet(outLine.getCourse().getCourseCode(), nameorCode))
                 .collect(Collectors.toCollection(ArrayList::new));
     }
 

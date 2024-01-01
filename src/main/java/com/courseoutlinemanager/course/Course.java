@@ -22,7 +22,7 @@ public class Course {
 
 	private String courseDescription;
 
-	private int courseCredits;
+	private double courseCredits;
 
 	private KnowledgeBlock knowledgeBlock = KnowledgeBlock.NULL;
 
@@ -53,7 +53,6 @@ public class Course {
 	 * các môn học khác)
 	 */
 	public Course(String courseCode, String courseName) {
-		this();
 		this.courseCode = courseCode;
 		this.courseName = courseName;
 	}
@@ -82,11 +81,11 @@ public class Course {
 		this.courseDescription = courseDescription;
 	}
 
-	public int getCourseCredits() {
+	public double getCourseCredits() {
 		return courseCredits;
 	}
 
-	public void setCourseCredits(int courseCredits) {
+	public void setCourseCredits(double courseCredits) {
 		this.courseCredits = courseCredits;
 	}
 
@@ -108,12 +107,11 @@ public class Course {
 	}
 
 
-	//kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
-	public boolean isAvailForOutline(String type) {
+	public boolean isAvailForOutline(String typeOfSystem) {
 		EducationalSystem eSys = null;
 		// Get type of educational system to which outline in this list belongs
 		for (CourseOutline outline : this.courseOutlineList) {
-			if (ProcessString.equalsByAlphabet(type, outline.getEducationalSystem().getTypeName()))
+			if (ProcessString.equalsByAlphabet(typeOfSystem, outline.getEducationalSystem().getTypeName()))
 				eSys = outline.getEducationalSystem();
 		}
 		if (eSys == null)
@@ -134,7 +132,7 @@ public class Course {
 	/**
 	 * Return the required course list
 	 */
-	public ArrayList<CourseCondition> getRequirements(String typeOfRequirement) {
+	public ArrayList<CourseCondition> getRequirement(String typeOfRequirement) {
 		return this.requirementList.stream()
 				.filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
 				.collect(Collectors.toCollection(ArrayList::new));
@@ -168,17 +166,13 @@ public class Course {
 	}
 
 
-	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete){
+	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete) {
 		for (CourseCondition i : this.requirementList)
 			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
 				return i.removeCourse(toDelete);
 		return false;
 	}
-
-	public void showRequirementList() {
-		
-	}
-
+	
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.
 	 * 

@@ -55,8 +55,7 @@ public class FileOutput {
                                                 printLine("- " + requirements.getTypeName() + ":", 2, WIDTH,
                                                                 INDENT_SPACE));
                                 for (Course i : requirements.getCourseList()) {
-                                        writer.write(printTable(i.getCourseName(), i.getCourseCode(), 3, WIDTH,
-                                                        INDENT_SPACE));
+                                        writer.write(printTable(i.getCourseName(), i.getCourseCode(), 3));
                                 }
                         }
                         writer.write(printLine("\n3.Subject objectives: ", 1, WIDTH, INDENT_SPACE));

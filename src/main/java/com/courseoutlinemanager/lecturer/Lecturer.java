@@ -21,17 +21,14 @@ public class Lecturer {
 		courseOutlineList = new ArrayList<>();
 	}
 
-	@Override
-	public String toString() {
-		return "Lecturer [lecturerName=" + lecturerName + ", lecturerId=" + lecturerId + "]";
-	}
-
 	public Lecturer(String name) {
-		this(name, String.format("LEC%05d", idCount++));
+		this();
+		this.lecturerName = name;
+		this.lecturerId = String.format("LECT%03d", idCount++);
 	}
 
-	// Prevent assign id manually
 	public Lecturer(String name, String id) {
+		this();
 		this.lecturerName = name;
 		this.lecturerId = id;
 	}
@@ -87,5 +84,10 @@ public class Lecturer {
 			return false;
 		Lecturer lecturer = (Lecturer) o;
 		return ProcessString.equalsByAlphabet(this.lecturerId, lecturer.lecturerId);
+	}
+
+	@Override
+	public String toString() {
+		return this.lecturerName + " (" + this.lecturerId + ")";
 	}
 }

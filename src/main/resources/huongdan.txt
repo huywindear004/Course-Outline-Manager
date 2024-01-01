@@ -6,7 +6,7 @@
         Thông báo ko tìm thấy
         Hỏi có muôn tạo giảng viên không?
         choice = takeUserinput();
-        IF(Có) -> Nhập tên, sau đó in ra thông tin giảng viên, Lecturermanager.add();
+        IF(Có) -> Nhập tên, id, sau đó in ra thông tin giảng viên, Lecturermanager.add();
         if(không) -> lặp lại bước 1
     }
     

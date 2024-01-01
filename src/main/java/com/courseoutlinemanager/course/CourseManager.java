@@ -28,12 +28,19 @@ public class CourseManager {
     }
 
     public void addCourse(Course newCourse) {
-        courseList.add(newCourse);
+        this.courseList.add(newCourse);
     }   
 
     public boolean deleteCourse(Course deleteCourse) {
         return courseList.remove(deleteCourse);
     }
+    
+    public Course createCourse(String name) {
+        Course newCourse = new Course(name);
+        return newCourse; 
+    }
+
+
 
 
     public ArrayList<Course> getCourseList() {

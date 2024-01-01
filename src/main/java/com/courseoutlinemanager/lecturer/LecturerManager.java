@@ -13,23 +13,36 @@ public class LecturerManager {
         this.lecturerList = new ArrayList<>();
     }
 
-    public ArrayList<Lecturer> getLecturerListlecturerList() {
+    public ArrayList<Lecturer> getLecturerList() {
         return lecturerList;
     }
 
-    public void setLecturerListlecturerList(ArrayList<Lecturer> lecturerList) {
+    public void setLecturerList(ArrayList<Lecturer> lecturerList) {
         this.lecturerList = lecturerList;
     }
 
-    public Lecturer getLecturer(Lecturer lect) throws NotFoundException {
-        int index = this.lecturerList.indexOf(lect);
-        if (index == -1)
-            throw new NotFoundException("Couldn't find " + lect.toString());
-        return this.lecturerList.get(index);
+    public int indexOfLecturer(Lecturer lect) {
+        return this.lecturerList.indexOf(lect);
     }
 
     public void addLecturer(Lecturer lecturer) {
         lecturerList.add(lecturer);
+    }
+
+    public Lecturer createLecturer(String name) {
+        Lecturer newLecturer = new Lecturer(name);
+        while (this.containsLecturer(newLecturer)) {
+            newLecturer = new Lecturer(name);
+        }
+        return newLecturer;
+    }
+
+    public Lecturer createLecturer(String name, String id) throws AlreadyExistException{
+        Lecturer newLecturer = new Lecturer(name, id);
+        int checkExistIndex = this.indexOfLecturer(newLecturer);
+        if(checkExistIndex != -1)
+            throw new AlreadyExistException("The id of these lecturers is duplicated: " + this.lecturerList.get(checkExistIndex) + " - " + newLecturer + ".");
+        return newLecturer;
     }
 
     public void removeLecturer(Lecturer lecturer) {
@@ -48,11 +61,10 @@ public class LecturerManager {
      * @throws NotFoundException
      *                           If cannot find the lecturer with the specified id
      */
-    public Lecturer findLecturerById(String id) throws NotFoundException {
+    public Lecturer getLecturerById(String id) throws NotFoundException {
         for (Lecturer lecturer : lecturerList) {
-            if (ProcessString.equalsByAlphabet(lecturer.getId(), id)) {
+            if (ProcessString.equalsByAlphabet(lecturer.getId(), id))
                 return lecturer;
-            }
         }
         throw new NotFoundException("Coundn't find lecturer with id:" + id + ".");
     }
@@ -68,7 +80,7 @@ public class LecturerManager {
      *         Outline list if found the lecturer
      */
     public ArrayList<CourseOutline> getCourseOutlinesByLecId(String id) throws NotFoundException {
-        return this.findLecturerById(id).getCourseOutlineList();
+        return this.getLecturerById(id).getCourseOutlineList();
     }
 
 }
