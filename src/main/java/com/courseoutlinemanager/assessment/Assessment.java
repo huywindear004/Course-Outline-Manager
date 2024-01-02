@@ -61,11 +61,20 @@ public class Assessment {
 				this.assessingType = i;
 		}
 	}
+
+	public void setAssessingType(AssessmentTypes type) {
+		this.assessingType = type;
+	}
+
 	//Check method when setting
 	public void setAssessingMethod(String method) {
 		for (AssessmentMethods i : AssessmentMethods.values()) {
 			if (ProcessString.equalsByAlphabet(method, i.toString()))
 				this.assessingMethod = i;
 		}
+	}
+
+	public void setAssessingMethod(AssessmentMethods method) {
+		this.assessingMethod = method;
 	}
 }

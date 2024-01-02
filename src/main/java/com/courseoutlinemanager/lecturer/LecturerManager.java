@@ -5,6 +5,7 @@ import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.common.ProcessString;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class LecturerManager {
     private ArrayList<Lecturer> lecturerList;
@@ -37,11 +38,12 @@ public class LecturerManager {
         return newLecturer;
     }
 
-    public Lecturer createLecturer(String name, String id) throws AlreadyExistException{
+    public Lecturer createLecturer(String name, String id) throws AlreadyExistException {
         Lecturer newLecturer = new Lecturer(name, id);
         int checkExistIndex = this.indexOfLecturer(newLecturer);
-        if(checkExistIndex != -1)
-            throw new AlreadyExistException("The id of these lecturers is duplicated: " + this.lecturerList.get(checkExistIndex) + " - " + newLecturer + ".");
+        if (checkExistIndex != -1)
+            throw new AlreadyExistException("The id of these lecturers is duplicated: "
+                    + this.lecturerList.get(checkExistIndex) + " - " + newLecturer + ".");
         return newLecturer;
     }
 
@@ -67,6 +69,36 @@ public class LecturerManager {
                 return lecturer;
         }
         throw new NotFoundException("Coundn't find lecturer with id:" + id + ".");
+    }
+
+    public Lecturer findLecturer(String codeOrName) throws NotFoundException {
+        for (Lecturer lecturer : lecturerList) {
+            if (ProcessString.equalsByAlphabet(lecturer.getId(), codeOrName)
+                    || ProcessString.equalsByAlphabet(lecturer.getName(), codeOrName))
+                return lecturer;
+        }
+        throw new NotFoundException("Coundn't find lecturer with id:" + codeOrName + ".");
+    }
+
+    public ArrayList<CourseOutline> numberOfOutlinewithCredits(String codeOrNameLecturer, double credits)
+            throws NotFoundException {
+        Lecturer lecturer = findLecturer(codeOrNameLecturer);
+        ArrayList<CourseOutline> filteredOutlines = new ArrayList<>();
+
+        if (lecturer != null) {
+            filteredOutlines = lecturer.getCourseOutlineList().stream()
+                    .filter(outline -> outline.getCourse().getCourseCredits() == credits)
+                    .collect(Collectors.toCollection(ArrayList::new));
+        } else {
+            throw new NotFoundException("Coundn't find lecturer with id:" + codeOrNameLecturer + ".");
+
+        }
+        return filteredOutlines;
+    }
+
+    public ArrayList<CourseOutline> sortedCourseOutlines(String codeOrName) throws NotFoundException {
+        Lecturer lecturer = findLecturer(codeOrName);
+        return lecturer.getCourseOutlineList();
     }
 
     /**

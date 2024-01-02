@@ -20,6 +20,6 @@ public class PrerequisiteCourses extends CourseCondition {
     
     @Override
     public String getTypeName() {
-        return "Prerequisite Course";
+        return "Prerequisite Courses";
     }
 }

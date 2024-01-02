@@ -20,7 +20,7 @@ public class PreviousCourses extends CourseCondition {
 
     @Override
     public String getTypeName() {
-        return "Previous Course";
+        return "Previous Courses";
     }
 }
         

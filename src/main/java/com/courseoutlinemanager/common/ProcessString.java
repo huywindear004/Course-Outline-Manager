@@ -45,10 +45,9 @@ public class ProcessString {
         int length = label.length();
         int halfLineLength = (maxLength - length) / 2;
         String horizontialLine = character.repeat(halfLineLength);
-        if(length % 2 != 0)
+        if (length % 2 != 0)
             return horizontialLine + label + horizontialLine + character;
         return horizontialLine + label + horizontialLine;
-        
     }
 
     public static String printLabel(String label, String character) {
@@ -104,23 +103,24 @@ public class ProcessString {
         }
         return res.toString();
     }
+    
 
     public static String stringConcat(ArrayList<String> strings) {
         StringBuilder temp = new StringBuilder();
-        if(strings.size() == 1)
+        if (strings.size() == 1)
             return strings.get(0);
         else
             for (String line : strings)
                 temp.append(line + "\n");
         return temp.toString().trim();
     }
-    
+
     public static ArrayList<String> getFileNames(String path, String... excludedString) {
         File folder = new File(path);
         ArrayList<String> excludedStrings = new ArrayList<>();
         ArrayList<String> res = new ArrayList<>();
         excludedStrings.addAll(Arrays.asList(excludedString));
-        String[] temp = folder.list(); 
+        String[] temp = folder.list();
         for (String i : temp) {
             boolean isExcluded = false;
             for (String exclStr : excludedStrings) {
@@ -129,9 +129,30 @@ public class ProcessString {
                     break;
                 }
             }
-            if(!isExcluded)
+            if (!isExcluded)
                 res.add(i);
         }
         return res;
+    }
+
+    public static String orderedList(ArrayList<String> texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < texts.size(); i++)
+            res.append(printLine((i + 1) + ". " + texts.get(i), indents)).append("\n");
+        return res.toString();
+    }
+
+    public static String orderedList(String[] texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < texts.length; i++)
+            res.append(printLine((i + 1) + ". " + texts[i], indents)).append("\n");
+        return res.toString();
+    }
+
+    public static String unorderedList(ArrayList<String> texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (String line : texts)
+            res.append(printLine("- " + line, indents)).append("\n");
+        return res.toString();
     }
 }

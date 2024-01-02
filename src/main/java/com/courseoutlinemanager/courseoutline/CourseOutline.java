@@ -6,7 +6,6 @@ import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.assessment.*;
 import com.courseoutlinemanager.common.customexception.*;
 
-import static com.courseoutlinemanager.common.output.ConsoleOutput.takeUserInput;
 
 import java.util.ArrayList;
 
@@ -39,11 +38,6 @@ public class CourseOutline {
 		this.gradeList = new ArrayList<>();
 	}
 
-	public CourseOutline(Course course, EducationalSystem e) {
-		this.course = course;
-		this.educationalSystem = e;
-	}
-
 	public CourseOutline(Course course, Lecturer compiler) {
 		this.course = course;
 		this.compiler = compiler;
@@ -52,6 +46,14 @@ public class CourseOutline {
 	public CourseOutline(Course course, Lecturer compiler, EducationalSystem e) {
 		this(course, compiler);
 		this.educationalSystem = e;
+	}
+
+	public static int getMinGradesNum(){
+		return MIN_GRADES;
+	}
+
+	public static int getMaxGradesNum(){
+		return MAX_GRADES;
 	}
 
 	public Course getCourse() {
@@ -74,20 +76,8 @@ public class CourseOutline {
 		return this.compiler;
 	}
 
-	public ArrayList<Assessment> getGradeList() {
-		return this.gradeList;
-	}
-
 	public EducationalSystem getEducationalSystem() {
 		return this.educationalSystem;
-	}
-
-	public void setEducationalSystem(EducationalSystem e) {
-		this.educationalSystem = e;
-	}
-
-	public boolean hasEnoughGrades() {
-		return this.gradeList.size() >= MIN_GRADES && this.gradeList.size() <= MAX_GRADES;
 	}
 
 	public void setCourseObjectiveList(ArrayList<String> objectives) {
@@ -102,14 +92,32 @@ public class CourseOutline {
 		this.courseContent = content;
 	}
 
+	public ArrayList<Assessment> getGradeList() {
+		return this.gradeList;
+	}
+
+	/**
+	 * @return {@code -1} if {@code gradeList.size()} {@code <} {@code MIN_GRADES}.
+	 * {@code 0} if {@code gradeList.size()} in range {@code MIN_GRADES} -> {@code MAX_GRADES}.
+	 * {@code 1} if {@code gradeList.size()} {@code ==} {@code MIN_GRADES}.
+	 */
+	public int hasEnoughGrades() {
+		int size = this.gradeList.size();
+		if (size < MIN_GRADES)
+			return -1;
+		if(size < MAX_GRADES)
+			return 0;
+		return 1;
+	}
+
 	private void addGrade(Assessment a) throws OutOfCapacityException{
-		if (this.gradeList.size() >= MAX_GRADES)
-			throw new OutOfCapacityException("The number of grades is enough.");
+		if (this.hasEnoughGrades() == 1)
+			throw new OutOfCapacityException("The number of " + this.toString() + "'s outline is enough.");
 		double currTotalWeight = 0;
 		for (Assessment i : this.gradeList)
 			currTotalWeight += i.getWeight();
 		if (Double.compare(currTotalWeight + a.getWeight(), TOTAL_WEIGHT) > 0)
-			throw new OutOfCapacityException("The total weight should be less than 100%");
+			throw new OutOfCapacityException("The total weight of all grades should be less than 100% " + String.format("[%.2f%% / 100%%]",(currTotalWeight + a.getWeight())*100.0));
 		this.gradeList.add(a);
 	}
 
@@ -141,7 +149,11 @@ public class CourseOutline {
 		} else {
 			System.out.println("Invalid position.");
 		}
-	} 
+	}
+
+	public Assessment getGrade(int pos) {
+		return gradeList.get(pos);
+	}
 	
 
 	@Override

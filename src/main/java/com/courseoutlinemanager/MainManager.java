@@ -3,6 +3,7 @@ package com.courseoutlinemanager;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.course.CourseManager;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
+import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
 import com.courseoutlinemanager.courseoutline.CourseOutlineManager;
 import com.courseoutlinemanager.educationalsystem.EducationalSystem;
@@ -10,9 +11,15 @@ import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
 import com.courseoutlinemanager.lecturer.Lecturer;
 import com.courseoutlinemanager.lecturer.LecturerManager;
 import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
+import static com.courseoutlinemanager.common.input.ConsoleInput.*;
 
 import java.util.ArrayList;
+import java.util.stream.Collectors;
 
+import com.courseoutlinemanager.assessment.Assessment;
+import com.courseoutlinemanager.assessment.AssessmentMethods;
+import com.courseoutlinemanager.assessment.AssessmentTypes;
+import com.courseoutlinemanager.assessment.AssessmentTypes;
 import com.courseoutlinemanager.common.customexception.AlreadyExistException;
 import com.courseoutlinemanager.common.customexception.CancelInputException;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
@@ -35,21 +42,30 @@ public class MainManager {
 
     public Lecturer inputLecturer(LecturerManager lM) throws CancelInputException {
         Lecturer res = new Lecturer();
-        int choice;
+        int String;
         String lecturerId;
+        int choice;
         while (true) {
             lecturerId = takeUserInput("instructor's id");
+
+            // if the lecturer with the input id is found -> return them
             try {
+                // this function will throw NotFoundException() if it couldn't find by the input
+                // id
                 res = lM.getLecturerById(lecturerId);
                 System.out.println(printLabel("WELCOME " + res, "~", getWidth()));
+                System.out.println();
                 break;
 
-                // the lecturer doesn't exist
+                // if not found it will throw NotFoundException() and force user to Re-enter /
+                // Exit to main-menu
             } catch (NotFoundException e) {
                 printLabel(e.getMessage(), "*", getWidth());
                 String[] texts = { "Re-enter id" };
                 printChoiceMenu("Couldn't find " + lecturerId, texts);
                 choice = takeUserInput("your choice", 0, 1);
+
+                // Exit to main-menu
                 if (choice == 0)
                     throw new CancelInputException();
             }
@@ -60,28 +76,36 @@ public class MainManager {
     public Course inputCourse(CourseManager cM) throws CancelInputException {
         String nameOrCode;
         int choice;
-        ArrayList<Course> courseList;
+        ArrayList<Course> courseList; // courseList is the result after searching by nameOrCode
         Course newCourse = new Course();
-        String[] subMenu = { "Create a new course.", "Re-enter." };
+        String[] subMenu = { "Create a new course.", "Re-enter." }; // the menu in case not found
         while (true) {
             nameOrCode = takeUserInput("course name or course code");
             courseList = cM.findCourse(nameOrCode);
 
+            // if the result is empty -> print the subMenu
             if (courseList.isEmpty()) {
                 printChoiceMenu("Couldn't find " + nameOrCode, subMenu);
                 choice = takeUserInput("your choice", 0, 2);
                 switch (choice) {
                     case 1 -> {
-                        newCourse = cM.createCourse(takeUserInput("Enter the name of the course: "));
+                        newCourse = cM.createCourse(takeUserInput("the name of the course"));
                         System.out.println(printLabel("Your new course is: " + newCourse.toString(), "~"));
                         cM.addCourse(newCourse);
                         return newCourse;
                     }
+
+                    // Exit to main-menu
                     case 0 -> throw new CancelInputException();
                 }
+
+                // if there is only 1 result -> return the found course
             } else if (courseList.size() == 1) {
                 System.out.println(printLabel(courseList.get(0).toString(), "~"));
                 return courseList.get(0);
+
+                // if there are many results -> print the relevant courses and Re-enter the
+                // nameOrCode
             } else {
                 System.out.println("Relevant courses:");
                 for (Course c : courseList) {
@@ -92,21 +116,30 @@ public class MainManager {
         }
     }
 
+    /**
+     * This function returns the object of EducationalSystem which is an attribute
+     * of the outline
+     * if the outline's course allows adding outline
+     */
     public EducationalSystem inputEducationalSystem(Course course, EducationalSystemManager eSM)
             throws CancelInputException {
         int choice;
-        ArrayList<EducationalSystem> eList;
+        ArrayList<EducationalSystem> eList; // eList is all educationSystems available
         while (true) {
-            ArrayList<String> subMenu = new ArrayList<>();
+            ArrayList<String> subMenu = new ArrayList<>(); // subMenu that show choices of all available
+                                                           // educationSystems
             eList = eSM.getEducationalSystemList();
-            
-            //get all type of educational system to print menu
+
+            // add all type of educational system to subMenu
             eList.forEach(e -> subMenu.add(e.getTypeName()));
-            printChoiceMenu("Choose educational system", subMenu);
+            printChoiceMenu("Choose educational system for " + course.toString() + "'s outline", subMenu);
 
             choice = takeUserInput("your choice", 0, eList.size());
+
+            // Exit to main-menu
             if (choice == 0)
                 throw new CancelInputException();
+
             // get the type of educational system to check if the course is available to add
             // courseoutline
             EducationalSystem typeOfSystem = eList.get(choice - 1);
@@ -115,6 +148,64 @@ public class MainManager {
                 System.out.println(course.toString() + " has enough outline in " + typeOfSystem);
             } else {
                 return typeOfSystem;
+            }
+        }
+    }
+
+    public void editCourseOutline(CourseOutline outline, CourseManager cM) throws CancelInputException {
+        int choice;
+        while (true) {
+            printEditOutlineMenu(outline);
+            choice = takeUserInput("your choice", 0, 5);
+            switch (choice) {
+                // exit to main-menu
+                case 0 -> throw new CancelInputException();
+
+                // course objectives
+                case 1 -> {
+                    System.out.println(printLabel("Edit " + outline.toString() + "'s outline course objectives", "="));
+                    int courseObjectivesNum = takeUserInput("the objectives number", 0, 10);
+                    ArrayList<String> courseObjectiveList = new ArrayList<>();
+                    for (int i = 1; i <= courseObjectivesNum; i++) {
+                        courseObjectiveList.add(takeUserInput("objectives " + i));
+                    }
+                    outline.setCourseObjectiveList(courseObjectiveList);
+                    System.out.println(printLabel("Edit successfully!", "~"));
+                }
+
+                // learning outcomes
+                case 2 -> {
+                    System.out.println(printLabel("Edit " + outline.toString() + "'s outline learning outcomes", "="));
+                    int learningOutcomesNum = takeUserInput("the learning outcomes number", 0, 10);
+                    ArrayList<String> learningOutcomeList = new ArrayList<>();
+                    for (int i = 1; i <= learningOutcomesNum; i++) {
+                        learningOutcomeList.add(takeUserInput("learning outcome " + i));
+                    }
+                    outline.setLearningOutcomeList(learningOutcomeList);
+                    System.out.println(printLabel("Edit successfully!", "~"));
+                }
+
+                // course content
+                case 3 -> {
+                    System.out.println(printLabel("Edit " + outline.toString() + "'s outline content", "="));
+                    int contentNum = takeUserInput("the content number", 0, 10);
+                    ArrayList<String> courseContent = new ArrayList<>();
+                    for (int i = 1; i <= contentNum; i++) {
+                        courseContent.add(takeUserInput("content " + i));
+                    }
+                    outline.setCourseContent(courseContent);
+                    System.out.println(printLabel("Edit successfully!", "~"));
+                }
+
+                // requirements
+                case 4 -> {
+                    this.editCourseRequirements(outline.getCourse(), cM);
+                }
+
+                // grades
+                case 5 -> {
+                    this.editCourseOutlineGrades(outline);
+                }
             }
         }
     }
@@ -133,26 +224,242 @@ public class MainManager {
 
     public void editCourseRequirements(Course course, CourseManager cM) throws CancelInputException {
         int choice;
+        String[] addOrDeleteMenu = { "Add course.", "Delete course." };
         ArrayList<String> requirementsMenu = new ArrayList<>();
-        //get all type of requirements to print menu
+        // get all type of requirements to print menu
         for (CourseCondition req : course.getRequirementList()) {
             requirementsMenu.add(req.getTypeName());
         }
         while (true) {
-            printChoiceMenu("Choose type of requirement", requirementsMenu);
-            choice = takeUserInput("your choice", 0, requirementsMenu.size()); 
-            if(choice == 0)
+            printChoiceMenu("Edit requirements of " + course.toString(), requirementsMenu);
+
+            choice = takeUserInput("your choice", 0, requirementsMenu.size());
+            if (choice == 0)
                 throw new CancelInputException();
             try {
-                course.addCourseToRequirementList(requirementsMenu.get(choice - 1), this.inputCourse(this.cM));
-            } 
-            catch (OutOfCapacityException | AlreadyExistException e) {
+                String typeOfRequirement = requirementsMenu.get(choice - 1);
+
+                // print the menu and the requirement's courses
+                System.out.println(printLabel("Edit " + typeOfRequirement + " of " + course.toString(), "="));
+                System.out.print(orderedList(addOrDeleteMenu, 0));
+                System.out.println(printLine("0. Exit.", 0));
+                System.out.println(printLine(typeOfRequirement, 4));
+                if (course.getRequirement(typeOfRequirement).isEmpty())
+                    System.out.println(printLine("NONE", 4));
+                else {
+                    // print the courseList of course's requirement
+                    System.out.print(unorderedList(course.getRequirement(typeOfRequirement).getCourseList().stream()
+                            .map(object -> object.toString()).collect(Collectors.toCollection(ArrayList::new)), 4));
+                }
+
+                System.out.println(printLabel("", "="));
+
+                // Exit to main-menu
+                if (choice == 0)
+                    throw new CancelInputException();
+
+                // add course to requirement
+                else if (choice == 1) {
+                    course.addCourseToRequirementList(typeOfRequirement, this.inputCourse(cM));
+                    System.out.println("Added successfully!");
+                }
+
+                // remove course of requirement
+                else if (choice == 2) {
+                    course.removeCourseOfRequirementList(typeOfRequirement, this.inputCourse(cM));
+                    System.out.println("Removed successfully!");
+                }
+
+            } catch (OutOfCapacityException | AlreadyExistException | NotFoundException e) {
                 System.out.println(printLabel(e.getMessage(), "*"));
             }
         }
     }
 
-    public void run() {
+    public void editKnowledgeBlock(Course course) throws CancelInputException {
+        int choice;
+        KnowledgeBlock[] allBlocks = KnowledgeBlock.values();
+        ArrayList<String> knowledgeBlockMenu = new ArrayList<>();
+        for (KnowledgeBlock block : allBlocks) {
+            knowledgeBlockMenu.add(block.toString());
+        }
+        knowledgeBlockMenu.remove(0);
+
+        printChoiceMenu("Choose type of KnowledgeBlock of " + course.toString(), knowledgeBlockMenu);
+        choice = takeUserInput("your choice", 0, knowledgeBlockMenu.size());
+        if (choice == 0)
+            throw new CancelInputException();
+        course.setKnowledgeBlock(KnowledgeBlock.valueOf(knowledgeBlockMenu.get(choice-1)));
+    }
+
+    public void editCourseOutlineGrades(CourseOutline outline) throws CancelInputException {
+        int choice;
+        String[] addOrDeleteMenu = { "Add grade.", "Edit grade.", "Delete grade." };
+
+        while (true) {
+            System.out.println(printLabel("Edit grades of " + outline.toString() + "'s outline", "="));
+            System.out.print(orderedList(addOrDeleteMenu, 0));
+            System.out.println(printLine("0. Exit.", 0));
+            System.out.println(printLine("Grades: ", 1));
+            ArrayList<Assessment> gradeList = outline.getGradeList();
+            if (gradeList.isEmpty())
+                System.out.println(printLine("NONE", 4));
+            else {
+                // print the grades
+                System.out.print(unorderedList(gradeList.stream()
+                        .map(grade -> grade.toString()).collect(Collectors.toCollection(ArrayList::new)), 4));
+            }
+            System.out.println(printLabel("", "="));
+
+            choice = takeUserInput("your choice", 0, 3);
+
+            // exit to main-menu
+            if (choice == 0)
+                throw new CancelInputException();
+
+            // add grade
+            else if (choice == 1) {
+                System.out.println(printLabel("Add grade to " + outline.toString() + "'s outline", "="));
+                try {
+                    outline.addGrade(
+                            takeUserInput("the type of this grade"),
+                            takeUserInput("the method of this grade"),
+                            takeUserInput("the weight of this grade", "0.05", "1.0"));
+                } catch (OutOfCapacityException e) {
+                    System.out.println(printLabel(e.getMessage(), "*"));
+                }
+            }
+
+            // edit grade
+            else if (choice == 2) {
+                while (true) {
+
+                }
+            }
+
+            // remove grade
+            else if (choice == 3) {
+
+            }
+
+        }
+    }
+
+    private void editGrade(CourseOutline outline, Assessment assessment) throws CancelInputException {
+        String[] gradeProperties = {
+                "Type [" + assessment.getAssessingType() + "].",
+                "Method [" + assessment.getAssessingMethod() + "].",
+                "Weight [" + assessment.getWeight() + "].",
+                "Content."
+        };
+        ArrayList<String> typeMenu = new ArrayList<>();
+        for (AssessmentTypes type : AssessmentTypes.values())
+            typeMenu.add(type.toString());
+        typeMenu.remove(0);
+
+        ArrayList<String> methodMenu = new ArrayList<>();
+        for (AssessmentMethods method : AssessmentMethods.values())
+            methodMenu.add(method.toString());
+        methodMenu.remove(0);
+
+        int choice;
+        while (true) {
+            System.out.println(printLabel("Edit grade of " + outline.toString() + "'s outline", "="));
+            System.out.print(orderedList(gradeProperties, 0));
+            System.out.println(printLine("0. Exit.", 0));
+            System.out.println(printLabel("", "="));
+            choice = takeUserInput("your choice", 0, gradeProperties.length);
+
+            //exit to choose-grade menu
+            if (choice == 0)
+                throw new CancelInputException();
+
+            //ASSESSING TYPE
+            else if (choice == 1) {
+                System.out.println(printLabel("Edit grade of " + outline.toString() + "'s outline", "="));
+                printChoiceMenu("Choose type of assessments for " + outline.toString() + "'s outline's grade",typeMenu);
+                choice = takeUserInput("your choice", 0, typeMenu.size());
+
+                //exit to edit-grades menu
+                if (choice == 0)
+                    continue; 
+
+                assessment.setAssessingType(typeMenu.get(choice - 1));
+            }   
+
+            //ASSESSING METHOD
+            else if (choice == 2) {
+                System.out.println(printLabel("Edit grade of " + outline.toString() + "'s outline", "="));
+                //exit to edit-grades menu
+                if (choice == 0)
+                    continue;                 
+
+                
+            }
+
+            //WEIGHT
+            else if (choice == 3) {
+                System.out.println(printLabel("Edit grade of " + outline.toString() + "'s outline", "="));
+
+            }
+
+            //CONTENT
+            else if (choice == 4) {
+                System.out.println(printLabel("Edit grade of " + outline.toString() + "'s outline", "="));
+
+            }
+        }
+    }
+
+    public void statisticalCourseOutline(LecturerManager lMm, CourseOutlineManager cOM)
+            throws NotFoundException, CancelInputException {
+        int choice;
+        ArrayList<CourseOutline> outlineList = new ArrayList<CourseOutline>();
+        String[] selectionList = {
+                "Statistics on the number of outlines according to the number of credits of the lecturer",
+                "Statistics on the number of outlines according to the number of credits in the outline list"
+        };
+        printChoiceMenu("Choose a statistical option", selectionList);
+        choice = takeUserInput("your choose", 0, 2);
+        if (choice == 1) {
+            String nameOrCodeLecturer = takeUserInput("Enter the instructor's name or code");
+            System.out.println("Enter number of credits: ");
+            Double credits = sc.nextDouble();
+            outlineList = lM.numberOfOutlinewithCredits(nameOrCodeLecturer, credits);
+        }
+        if (choice == 2) {
+            System.out.println("Enter number of credits");
+            Double credits = sc.nextDouble();
+            outlineList = cOM.numberOfOutlinewithCredits(credits);
+        }
+        // Exit to main-menu
+        if (choice == 0)
+            throw new CancelInputException();
+
+        System.out.println("Outline list: ");
+    }
+
+    public void sortingCourseOutLine(LecturerManager lM) throws NotFoundException, CancelInputException {
+        ArrayList<CourseOutline> listOfArrangedOutlines = new ArrayList<CourseOutline>();
+        String[] sortingOptions = {
+                "Arrange the list of lecturers' outlines",
+                "Sort the outline list by outline list"
+        };
+        printChoiceMenu("Choose a statistical option", sortingOptions);
+        int choice = takeUserInput("your choose", 0, 2);
+        if (choice == 1) {
+            String nameOrCodeLecturer = takeUserInput("Enter the instructor's name or code");
+            listOfArrangedOutlines = lM.sortedCourseOutlines(nameOrCodeLecturer);
+        }
+        if (choice == 2) {
+            listOfArrangedOutlines = cOM.sortedCourseOutlines();
+        }
+        // Exit to main-menu
+        if (choice == 0)
+            throw new CancelInputException();
+    }
+
+    public void run() throws NotFoundException, CancelInputException {
 
         cM.addCourse(new Course("OOP"));
         cM.addCourse(new Course("S&P"));
@@ -208,6 +515,12 @@ public class MainManager {
                     } catch (CancelInputException e) {
                         break;
                     }
+                    try {
+                        editKnowledgeBlock(newCourse);
+
+                    } catch (CancelInputException e) {
+                        break;
+                    }
                     editCourseDescription(newCourse);
                     editNumberOfCredits(newCourse);
                     try {
@@ -216,53 +529,9 @@ public class MainManager {
                         break;
                     }
 
-                    // ArrayList<String> textCondition = new ArrayList<>();
-                    // ArrayList<CourseCondition> conditionList = newCourse.getRequirementList();
-                    // conditionList.forEach(c -> textCondition.add(c.getTypeName()));
-                    // printChoiceMenu("Select subject requirements", textCondition);
-                    // choice = takeUserInput("your choice", 0, conditionList.size());
+                    CourseOutline newOutLine = new CourseOutline(newCourse, newLecturer, educationalSystem);
+                    cOM.addCourseOutline(newOutLine);
 
-                    // String typeOfRequirements = conditionList.get(choice - 1).getTypeName();
-
-                    // Course tmpCourse = new Course();
-                    // try {
-                    // tmpCourse = inputCourse(cM);
-                    // } catch (CancelInputException e) {
-                    // break;
-                    // }
-
-                    // String nameCourse = takeUserInput("the name of the course");
-
-                    // String codeCourse = takeUserInput("the code of the course");
-
-                    // Course tempCourse = new Course(nameCourse, codeCourse);
-
-                    // boolean isAddableCourse = false;
-                    // // Check if the tempCourse already existed in cM.courseList
-                    // try {
-                    // // if the tempCourse exist then change the reference of tempCourse to the
-                    // // existed course
-                    // tempCourse = cM.getCourse(tempCourse);
-                    // isAddableCourse = false;
-                    // } catch (NotFoundException e) {
-                    // isAddableCourse = true;
-                    // }
-
-                    // // add it to requirements
-                    // try {
-                    // newCourse.addCourseToRequirementList(typeOfRequirements, tempCourse);
-                    // } catch (OutOfCapacityException | AlreadyExistException e) {
-                    // System.out.println(
-                    // e.getMessage() + " in " + newCourse);
-                    // isAddableCourse = false;
-                    // }
-
-                    // if (isAddableCourse)
-                    // cM.addCourse(tempCourse);
-
-                    // }
-                    // System.out.println(newCourse);
-                    printCourse(newCourse);
                 }
                 case 2 -> {
 
@@ -279,12 +548,28 @@ public class MainManager {
                     }
                 }
                 case 5 -> {
+                    String codeRequirement = takeUserInput("Input the code of requirement course: ");
+                    System.out.println("Course List: ");
+                    for (Course c : cM.findCourseByCodeRequirement(codeRequirement)) {
+                        System.out.println(c);
+                    }
 
                 }
                 case 6 -> {
+                    // String[] sortingOptions = {
+                    // "Arrange the list of lecturers' outlines",
+                    // "Sort the outline list by outline list"
+                    // };
 
                 }
                 case 7 -> {
+                    String codeLecturer = takeUserInput("Input the code of requirement course: ");
+                    System.out.println("Outline List: ");
+                    for (CourseOutline c : cOM.findCourseOutlineListByIdLecturer(codeLecturer)) {
+                        System.out
+                                .println(c.getCourse().getCourseName() + "-" + c.getEducationalSystem().getTypeName());
+                    }
+
                 }
                 // Export outline
                 case 8 -> {
@@ -307,6 +592,7 @@ public class MainManager {
                     }
                 }
                 case 9 -> {
+                    statisticalCourseOutline(lM, cOM);
 
                 }
                 case 0 -> {

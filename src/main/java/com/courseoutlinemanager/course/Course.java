@@ -2,6 +2,7 @@ package com.courseoutlinemanager.course;
 
 import com.courseoutlinemanager.common.ProcessString;
 import com.courseoutlinemanager.common.customexception.AlreadyExistException;
+import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
 import com.courseoutlinemanager.course.coursecondition.PrerequisiteCourses;
@@ -132,10 +133,11 @@ public class Course {
 	/**
 	 * Return the required course list
 	 */
-	public ArrayList<CourseCondition> getRequirement(String typeOfRequirement) {
-		return this.requirementList.stream()
-				.filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
-				.collect(Collectors.toCollection(ArrayList::new));
+	public CourseCondition getRequirement(String typeOfRequirement) throws NotFoundException {
+		for(CourseCondition i : this.requirementList)
+			if(ProcessString.equalsByAlphabet(typeOfRequirement,i.getTypeName()))
+				return i;
+		throw new NotFoundException("Couldn't find " + typeOfRequirement);
 	}
 
 	// public void setRequirementList(ArrayList<CourseCondition> requirements) {
@@ -155,24 +157,39 @@ public class Course {
 	 * @throws AlreadyExistException
 	 *                                If there is the equivalent course in the
 	 *                                requirement.
+	 * @throws NotFoundException 
+	 * If the type of requirement is not found
 	 */
 	public void addCourseToRequirementList(String typeOfRequirement, Course toBeAdded)
-			throws OutOfCapacityException, AlreadyExistException {
+			throws OutOfCapacityException, AlreadyExistException, NotFoundException {
 		if(toBeAdded.equals(this))
 			throw new AlreadyExistException("Duplicate course code " + this + " " + toBeAdded);
-		for (CourseCondition i : this.requirementList)
-			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
-				i.addCourse(toBeAdded);
+		this.getRequirement(typeOfRequirement).addCourse(toBeAdded);
 	}
 
 
-	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete) {
-		for (CourseCondition i : this.requirementList)
-			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
-				return i.removeCourse(toDelete);
-		return false;
+	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete) 
+			throws AlreadyExistException, NotFoundException {
+		if(toDelete.equals(this))
+			throw new AlreadyExistException("Duplicate course code " + this + " " + toDelete);
+		return this.getRequirement(typeOfRequirement).removeCourse(toDelete);
 	}
 	
+	
+
+
+	
+	public Course findCourseHasRequirementCode(String codeCourse) {
+		for (CourseCondition i : this.requirementList) {
+			return i.findCourseById(codeCourse);
+		}
+		return null;
+	}
+	
+
+
+
+
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.
 	 * 

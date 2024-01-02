@@ -37,9 +37,19 @@ public class CourseManager {
     
     public Course createCourse(String name) {
         Course newCourse = new Course(name);
-        return newCourse; 
+        return newCourse;
     }
 
+    public ArrayList<Course> findCourseByCodeRequirement(String codeRequirement) {
+        ArrayList<Course> CourseList = new ArrayList<Course>();
+        for (Course c : this.courseList) {
+            if (c.findCourseHasRequirementCode(codeRequirement) != null) {
+                CourseList.add(c);
+            }
+        }
+        
+        return CourseList;
+    }
 
 
 

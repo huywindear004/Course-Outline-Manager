@@ -34,7 +34,7 @@ public abstract class CourseCondition {
 
     private Course getCourseIfItExist(Course toFind) throws NotFoundException {
         int index = this.courseList.indexOf(toFind);
-        if(index == -1)
+        if (index == -1)
             throw new NotFoundException("Couldn't find " + toFind.toString());
         return this.courseList.get(index);
     }
@@ -50,13 +50,15 @@ public abstract class CourseCondition {
      */
     public void addCourse(Course toBeAddedCourse) throws OutOfCapacityException, AlreadyExistException {
         if (this.size() >= this.getMAX_COURSES())
-            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!", getTypeName()));
+            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!", this.getTypeName()));
 
         try {
             toBeAddedCourse = this.getCourseIfItExist(toBeAddedCourse);
-            //if it already existed - throw AlreadyExistException
-            //if it didn't exist - add it to the list
-            throw new AlreadyExistException(toBeAddedCourse.toString() + " already existed ");
+            
+            // if it already existed - throw AlreadyExistException
+            throw new AlreadyExistException(toBeAddedCourse.toString() + " already existed in " + this.getTypeName());
+            
+        // if it didn't exist - add it to the list
         } catch (NotFoundException e) {
             this.courseList.add(toBeAddedCourse);
         }
@@ -65,8 +67,6 @@ public abstract class CourseCondition {
     public boolean removeCourse(Course toBeRemovedCourse) {
         return this.courseList.remove(toBeRemovedCourse);
     }
-
-
 
     /**
      * Remove the specified course. If the given course isn't in this list then the
@@ -77,7 +77,6 @@ public abstract class CourseCondition {
      * @return
      *         True if the given course is present
      */
-
 
     public int size() {
         return this.courseList.size();
@@ -94,8 +93,21 @@ public abstract class CourseCondition {
     public boolean contains(Course course) {
         return this.courseList.contains(course);
     }
+    
+    public Course findCourseById(String courseId) {
+        for (Course course : this.courseList) {
+            if (course.getCourseCode().equals(courseId)) {
+                return course;
+            }
+        }
+        return null; 
+    }
 
     public ArrayList<Course> getCourseList() {
         return this.courseList;
+    }
+
+    public boolean isEmpty(){
+        return this.courseList.isEmpty();
     }
 }
