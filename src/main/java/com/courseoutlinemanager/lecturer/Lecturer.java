@@ -78,27 +78,35 @@ public class Lecturer {
 		return this.courseOutlineList.size();
 	}
 
-	public ArrayList<CourseOutline> sortCourseOutline() {
-		ArrayList<CourseOutline> sortedList = new ArrayList<>(courseOutlineList);
-		Comparator<CourseOutline> comparator = new Comparator<CourseOutline>() {
-			@Override
-			public int compare(CourseOutline outline1, CourseOutline outline2) {
+	// public ArrayList<CourseOutline> sortCourseOutline() {
+	// 	ArrayList<CourseOutline> sortedList = new ArrayList<>(courseOutlineList);
+	// 	Comparator<CourseOutline> comparator = new Comparator<CourseOutline>() {
+	// 		@Override
+	// 		public int compare(CourseOutline outline1, CourseOutline outline2) {
 
-				double credit1 = outline1.getCourse().getCourseCredits();
-				double credit2 = outline2.getCourse().getCourseCredits();
+	// 			double credit1 = outline1.getCourse().getCourseCredits();
+	// 			double credit2 = outline2.getCourse().getCourseCredits();
 
-				int creditComparison = Double.compare(credit2, credit1);
+	// 			int creditComparison = Double.compare(credit2, credit1);
 
-				if (creditComparison == 0) {
-					return outline1.getCourse().getCourseCode().compareTo(outline2.getCourse().getCourseCode());
-				}
-				return creditComparison;
-			}
-		};
+	// 			if (creditComparison == 0) {
+	// 				return outline1.getCourse().getCourseCode().compareTo(outline2.getCourse().getCourseCode());
+	// 			}
+	// 			return creditComparison;
+	// 		}
+	// 	};
 
-		Collections.sort(this.courseOutlineList, comparator);
+	// 	Collections.sort(this.courseOutlineList, comparator); //z bỏ cái này
+	// 	return sortedList;
+	// }
 
-		return sortedList;
+	public void sortCourseOutline() {
+		this.courseOutlineList.sort((x,y)->{
+			int comp = Double.compare(y.getCourse().getCourseCredits(), x.getCourse().getCourseCredits());
+			if(comp != 0)
+				return comp;
+			return x.getCourse().getCourseCode().compareTo(y.getCourse().getCourseCode());
+		});
 	}
 
 	@Override

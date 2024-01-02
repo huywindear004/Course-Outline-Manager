@@ -34,13 +34,13 @@ public class ConsoleOutput {
         System.out.println(printLine("5. Description: " + course.getCourseDescription(), 1));
         System.out.println(printLine("6. Requirements: ", 1));
         for (CourseCondition requirement : course.getRequirementList()) {
-            System.out.print(printLine("- " + requirement.getTypeName() + ":", 2));
+            System.out.println(printLine("- " + requirement.getTypeName() + ":", 2));
             if (requirement.isEmpty()) {
                 System.out.println(printLine("NONE", 5));
                 continue;
             }
             for (Course i : requirement.getCourseList()) {
-                System.out.println(printTable(i.getCourseName(), i.getCourseCode(), "", 3));
+                System.out.println(printLine(i.toString(),3));
             }
         }
         System.out.println(printLabel("", "="));
@@ -53,11 +53,11 @@ public class ConsoleOutput {
         System.out.println(printLabel("", "="));
     }
 
-    public static void printCourseOutLine(CourseOutline courseOutline, Lecturer lecturer, Course course) {
+    public static void printCourseOutLine(CourseOutline courseOutline) {
         System.out.println(printLabel("OPEN UNIVERSITY", " "));
         System.out.println(printLabel("---------------", " "));
-        printLecturer(lecturer);
-        printCourse(course);
+        printLecturer(courseOutline.getCompiler());
+        printCourse(courseOutline.getCourse());
         System.out.println(printLine("Subject objectives:", 1));
         for (String i : courseOutline.getCourseObjectiveList()) {
             System.out.println(printLine("- " + i, 2));
@@ -174,7 +174,6 @@ public class ConsoleOutput {
     public static void printExportMenu() {
         String[] text = {
                 "Export 1 outline to console.",
-                "Export 1 outline to .txt file.",
                 "Export all outline to .txt file."
         };
         printChoiceMenu("EXPORT COURSE OUTLINE", text);

@@ -96,11 +96,10 @@ public class LecturerManager {
         return filteredOutlines;
     }
 
-    public ArrayList<CourseOutline> sortedCourseOutlines(String codeOrName) throws NotFoundException {
+    public void sortCourseOutlines(String codeOrName) throws NotFoundException {
         Lecturer lecturer = findLecturer(codeOrName);
-        return lecturer.getCourseOutlineList();
-    }
-
+        lecturer.sortCourseOutline();
+    }  
     /**
      * Find lecturer by the given id and return their courseOutline list
      * 
