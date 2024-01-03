@@ -10,13 +10,6 @@ import com.courseoutlinemanager.educationalsystem.EducationalSystem;
 import com.courseoutlinemanager.educationalsystem.EducationalSystemManager;
 import com.courseoutlinemanager.lecturer.Lecturer;
 import com.courseoutlinemanager.lecturer.LecturerManager;
-import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.stream.Collectors;
-
 import com.courseoutlinemanager.assessment.Assessment;
 import com.courseoutlinemanager.assessment.AssessmentMethods;
 import com.courseoutlinemanager.assessment.AssessmentTypes;
@@ -24,6 +17,14 @@ import com.courseoutlinemanager.common.customexception.AlreadyExistException;
 import com.courseoutlinemanager.common.customexception.CancelInputException;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
+import com.courseoutlinemanager.common.output.FileOutput;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
+import java.util.Map;
+import java.util.stream.Collectors;
+
 
 import static com.courseoutlinemanager.common.ProcessString.*;
 
@@ -32,6 +33,8 @@ public class MainManager {
     private CourseOutlineManager cOM;
     private CourseManager cM;
     private EducationalSystemManager eSM;
+    private final String outputPath = "./output";
+
 
     public MainManager() {
         lM = new LecturerManager();
@@ -41,16 +44,6 @@ public class MainManager {
     }
 
     public void run() {
-
-        // cM.addCourse(new Course("OOP"));
-        // cM.addCourse(new Course("S&P"));
-        // cM.addCourse(new Course("PT"));
-        // cM.addCourse(new Course("LAW"));
-        // cM.addCourse(new Course("ITP"));
-
-        // lM.addLecturer(new Lecturer("Dương đẹp trai"));
-        // lM.addLecturer(new Lecturer("Dương "));
-        // lM.addLecturer(new Lecturer("Huy xấu trai"));
         while (true) {
             System.out.println("\nCourses: ");
             for (Course c : cM.getCourseList())
@@ -67,6 +60,7 @@ public class MainManager {
             printMainMenu();
             int choice = takeUserInput("your choice", 0, 11);
             switch (choice) {
+                // Create outline
                 case 1 -> {
                     Lecturer lecturer;
                     // get lecturer and check if they have enough outline or not
@@ -93,11 +87,14 @@ public class MainManager {
                         System.out.println(printLabel(e.getMessage(), "*"));
                     }
                 }
-                case 2 -> {
 
+                // Read custom data
+                case 2 -> {
+                    System.out.println(printLabel("THIS FEATURE WILL BE AVAILABLE SOON", "~"));
+                    System.out.println();
                 }
 
-                // edit outline
+                // Edit outline
                 case 3 -> {
                     Lecturer lecturer;
                     // get lecturer and print their outline
@@ -119,9 +116,12 @@ public class MainManager {
 
                         try {
                             this.editCourseOutline(outlineList.get(choice - 1), cM);
-                        } catch (CancelInputException ignored) {}
+                        } catch (CancelInputException ignored) {
+                        }
                     }
                 }
+
+                // Find course
                 case 4 -> {
                     try {
                         printCourse(inputCourse(cM));
@@ -237,10 +237,12 @@ public class MainManager {
 
                         // export all outlines to txt
                         else if (choice == 3) {
-
+                            FileOutput.writeOutlineList(cOM.getCourseOutlineList(), outputPath);
                         }
                     }
                 }
+
+                // Show statistics
                 case 9 -> {
                     try {
                         statisticalCourseOutline(lM, cOM, cM);
@@ -248,15 +250,21 @@ public class MainManager {
                         break;
                     }
                 }
+
+                // Create lecturer
                 case 10 -> {
                     createLecturer(lM);
 
                 }
+
+                // Create course
                 case 11 -> {
                     createCourse(cM);
                 }
+
+                // EXIT PROGRAMME
                 case 0 -> {
-                    printLabel(" THANKS FOR USING OUR APPLICATION", "=", getWidth());
+                    System.out.println(printLabel("THANKS FOR USING OUR APPLICATION", "=", getWidth()));
                     return;
                 }
             }
@@ -267,7 +275,7 @@ public class MainManager {
     public void createLecturer(LecturerManager lM) {
         System.out.println(printLabel("Create new lecturer", "="));
         Lecturer newLecturer = new Lecturer(takeUserInput("the name of the new lecturer"));
-        System.out.println(printLabel("The new lecturer is " + newLecturer,"~"));
+        System.out.println(printLabel("The new lecturer is " + newLecturer, "~"));
         lM.addLecturer(newLecturer);
     }
 
@@ -277,12 +285,13 @@ public class MainManager {
     public Course createCourse(CourseManager cM) {
         System.out.println(printLabel("Create new course", "="));
         Course newCourse = cM.createCourse(takeUserInput("the name of the new course"));
-        System.out.println(printLabel("The new course is " + newCourse,"~"));
+        System.out.println(printLabel("The new course is " + newCourse, "~"));
         cM.addCourse(newCourse);
         this.editCourseDescription(newCourse);
         try {
             this.editKnowledgeBlock(newCourse);
-        } catch (CancelInputException ignored) {}
+        } catch (CancelInputException ignored) {
+        }
         this.editNumberOfCredits(newCourse);
         try {
             this.editCourseRequirements(newCourse, cM);
@@ -447,7 +456,7 @@ public class MainManager {
 
                 // requirements
                 case 4 -> {
-                    try{
+                    try {
                         this.editCourseRequirements(outline.getCourse(), cM);
                     } catch (CancelInputException ignored) {
                     }
@@ -455,9 +464,10 @@ public class MainManager {
 
                 // grades
                 case 5 -> {
-                    try{
+                    try {
                         this.editCourseOutlineGrades(outline);
-                    }catch(CancelInputException ignored){}
+                    } catch (CancelInputException ignored) {
+                    }
                 }
             }
         }
@@ -767,7 +777,7 @@ public class MainManager {
             for (CourseOutline cO : lecturer.getCourseOutlineList()) {
                 double credits = cO.getCourse().getCourseCredits();
                 // get the value(outlines num) of the course according to credits num(key)
-                // if not found put it in the map with with the new key(credits) - value
+                // if not found put it in the map with the new key(credits) - value
                 // (outlinesNum of the course)
                 if (statistics.containsKey(credits))
                     statistics.put(credits, statistics.get(credits) + cO.getCourse().getCourseOutlineList().size());

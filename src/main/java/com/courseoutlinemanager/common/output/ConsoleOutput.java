@@ -58,19 +58,21 @@ public class ConsoleOutput {
         System.out.println(printLabel("---------------", " "));
         printLecturer(courseOutline.getCompiler());
         printCourse(courseOutline.getCourse());
-        System.out.println(printLine("7. Subject objectives:", 1));
+        System.out.println(printLine("7. Education system: " + courseOutline.getEducationalSystem().getTypeName(), 1));
+
+        System.out.println(printLine("8. Subject objectives:", 1));
         for (String i : courseOutline.getCourseObjectiveList()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("8. Subject outcome standards: ", 1));
+        System.out.println(printLine("9. Subject outcome standards: ", 1));
         for (String i : courseOutline.getLearningOutcomeList()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("9. Subject content:", 1));
+        System.out.println(printLine("10. Subject content:", 1));
         for (String i : courseOutline.getCourseContent()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("10. Student assessment: ", 1));
+        System.out.println(printLine("11. Student assessment: ", 1));
         System.out.println(printTable("Assessing type", "Assessing method", "Weight", 2));
         for (Assessment i : courseOutline.getGradeList()) {
             System.out.println(
@@ -81,65 +83,6 @@ public class ConsoleOutput {
         System.out.println(printLabel("", "="));
 
     }
-
-    // public static void printCourseOutline(CourseOutline courseOutline) {
-    // System.out.println(printLabel("OPEN UNIVERSITY", " "));
-    // System.out.println(printLabel("---------------", " "));
-    // System.out.println(printLabel("Course Outline", "="));
-    // System.out.println(printLine("I. General information", 0));
-    // System.out.println(
-    // printLine("1. Course Name: " + courseOutline.getCourse().getCourseName(), 1,
-    // INDENT_SPACE));
-    // System.out.println(
-    // printLine("2. Course Code: " + courseOutline.getCourse().getCourseCode(), 1,
-    // INDENT_SPACE));
-    // System.out.println(printLine("3. Belongs to the knowledge/skills block:) "
-    // + courseOutline.getCourse().getKnowledgeBlock().toString(), 1));
-    // System.out.println(printLine(
-    // "4. Number of credits: " + courseOutline.getCourse().getCourseCredits(), 1));
-    // System.out.println(printLine("5. In charge of the topic: ", 1));
-    // System.out.println(
-    // printLine("a. Lecturer " + courseOutline.getCompiler().getName(), 2));
-    // System.out.println(
-    // printLine("b. Id " + courseOutline.getCompiler().getId(), 2));
-    // System.out.println(printLine("II. Information about the subject", 0));
-    // System.out.println(
-    // printLine("1. Subject description: " +
-    // courseOutline.getCourse().getCourseDescription(), 1,
-    // WIDTH, INDENT_SPACE));
-    // System.out.println(printLine("2. Requirements:", 1));
-
-    // for (CourseCondition requirements :
-    // courseOutline.getCourse().getRequirementList()) {
-    // System.out.println(
-    // printLine("- " + requirements.getTypeName() + ":", 2));
-    // for (Course i : requirements.getCourseList()) {
-    // System.out.println(printTable(i.getCourseName(), i.getCourseCode(), 3));
-    // }
-    // }
-    // System.out.println(printLine("3. Subject objectives:", 1));
-    // for (String i : courseOutline.getCourseObjectiveList()) {
-    // System.out.println(printLine("- " + i, 2));
-    // }
-    // System.out.println(printLine("4. Subject outcome standards: ", 1));
-    // for (String i : courseOutline.getLearningOutcomeList()) {
-    // System.out.println(printLine("- " + i, 2));
-    // }
-    // System.out.println(printLine("5. Subject content:", 1));
-    // for (String i : courseOutline.getCourseContent()) {
-    // System.out.println(printLine("- " + i, 2));
-    // }
-    // System.out.println(printLine("6. Student assessment: ", 1));
-    // System.out.println(printTable("Assessing type", "Assessing method", "Weight",
-    // 2));
-    // for (Assessment i : courseOutline.getGradeList()) {
-    // System.out.println(
-    // printTable(i.getAssessingType().toString(),
-    // i.getAssessingMethod().toString(),
-    // String.valueOf(i.getWeight()), 3));
-    // }
-    // System.out.println(printLabel("", "="));
-    // }
 
     public static void printMainMenu() {
         String[] text = {

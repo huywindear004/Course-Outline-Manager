@@ -5,12 +5,10 @@ import com.courseoutlinemanager.common.customexception.AlreadyExistException;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.common.customexception.WrongFormatException;
-import com.courseoutlinemanager.common.output.ConsoleOutput;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.course.CourseManager;
 import com.courseoutlinemanager.course.knowledgeblock.KnowledgeBlock;
 
-import static com.courseoutlinemanager.common.ProcessString.printLabel;
 
 import java.util.Scanner;
 import java.io.File;
@@ -23,13 +21,10 @@ public class FileInput {
      * Get the course by reading file
      * 
      * @throws FileNotFoundException
-     * @throws NotFoundException
-     *                               If couldn't find educationalSystem or
-     *                               knowledgeBlock
      * @throws WrongFormatException
      */
-    public static Course getCourse(File input, CourseManager cM)
-            throws FileNotFoundException, NotFoundException, WrongFormatException {
+    public static Course readCourse(File input, CourseManager cM)
+            throws FileNotFoundException, WrongFormatException {
         fileScanner = new Scanner(input);
         Course newCourse = new Course();
         String[] temp;
@@ -82,7 +77,7 @@ public class FileInput {
                     // add it to requirements
                     try {
                         newCourse.addCourseToRequirementList(typeOfRequirements, tempCourse);
-                    } catch (OutOfCapacityException | AlreadyExistException e) {
+                    } catch (OutOfCapacityException | NotFoundException | AlreadyExistException e) {
                         System.out.println(e.getMessage() + " in " + newCourse + "{" + input.getName() + "}");
                         isAddableCourse = false;
                     }
@@ -99,25 +94,14 @@ public class FileInput {
         return newCourse;
     }
 
-    public static void main(String[] args) throws FileNotFoundException, NotFoundException {
-        CourseManager cM = new CourseManager();
-
-        String path = "./input/courses/";
-        System.out.print("\033[H\033[2J");
-        System.out.flush();
-        File[] inputs = new File(path).listFiles();
-        for (File i : inputs) {
-            try {
-                ConsoleOutput.printCourse(getCourse(i, cM));
-            } catch (FileNotFoundException | NotFoundException | WrongFormatException e) {
-                System.out.println(printLabel(e.getMessage(), "!", 90));
+    public static void readCourseFolder(String inputPath, CourseManager cM) {
+        File[] courseFiles = new File(inputPath).listFiles();
+        for (File i : courseFiles) {
+            try{
+                readCourse(i, cM);
+            } catch (FileNotFoundException | WrongFormatException e) {
+                System.out.println(e.getMessage());
             }
-        }
-        System.out.println();
-        System.out.println();
-
-        for (Course i : cM.getCourseList()) {
-            System.out.println(i.toString());
         }
     }
 }
