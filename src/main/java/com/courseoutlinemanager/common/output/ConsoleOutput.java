@@ -96,7 +96,7 @@ public class ConsoleOutput {
                 "Export course outline.",
                 "Show statistics on the number of outlines according to the number of credits.",
                 "Create lecturer",
-                "Create course"
+                "Create course",
         };
         printChoiceMenu("MAIN MENU", text);
     }
@@ -128,11 +128,15 @@ public class ConsoleOutput {
 
     public static void printEditOutlineMenu(CourseOutline outline) {
         String[] menu = {
+
                 "Course Objectives.",
                 "Learning outcomes.",
                 "Course content.",
                 "Requirements.",
-                "Grades."
+                "Grades.",
+                "Course description",
+                "Course credits",
+                "Course knowledge block"
         };
         printChoiceMenu("EDIT " + outline.toString() + "'s outline", menu);
     }

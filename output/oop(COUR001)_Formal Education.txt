@@ -1,0 +1,24 @@
+                                          Open University                                           
+                                          ---------------                                           
+===========================================Course Outline===========================================
+|I. General information                                                                            |
+|    1. Course Name: oop                                                                           |
+|    2. Course Code: COUR001                                                                       |
+|    3. Belongs to the knowledge/skills block: MAJOR                                               |
+|    4. Number of credits: 4.0                                                                     |
+|    5. In charge of the topic:                                                                    |
+|        a. Lecturer: duong                                                                        |
+|        b. Lecturer Id: LECT001                                                                   |
+|II. Information about the subject                                                                 |
+|    1. Education system: Formal Education                                                         |
+|    2. Subject description: duong                                                                 |
+|    3. Requirements:                                                                              |
+|        - Previous Courses:                                                                       |
+|        - Prerequisite Courses:                                                                   |
+|    4. Subject objectives:                                                                        |
+|    5. Subject outcome standards:                                                                 |
+|    6. Subject content:                                                                           |
+|    7. Subject evaluation:                                                                        |
+==================================================================================================== 
+
+còn 20p test kỹ vào thử mọi tình huống 

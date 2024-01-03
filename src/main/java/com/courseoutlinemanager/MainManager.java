@@ -25,7 +25,6 @@ import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-
 import static com.courseoutlinemanager.common.ProcessString.*;
 
 public class MainManager {
@@ -34,7 +33,6 @@ public class MainManager {
     private CourseManager cM;
     private EducationalSystemManager eSM;
     private final String outputPath = "./output";
-
 
     public MainManager() {
         lM = new LecturerManager();
@@ -81,6 +79,7 @@ public class MainManager {
                         lecturer.addCourseOutline(newOutLine);
                         course.addCourseOutline(newOutLine);
                         editCourseOutline(newOutLine, cM);
+
                     } catch (CancelInputException e) {
                         break;
                     } catch (OutOfCapacityException | AlreadyExistException e) {
@@ -413,7 +412,7 @@ public class MainManager {
         int choice;
         while (true) {
             printEditOutlineMenu(outline);
-            choice = takeUserInput("your choice", 0, 5);
+            choice = takeUserInput("your choice", 0, 8);
             switch (choice) {
                 // exit to main-menu / choose-outline menu
                 case 0 -> throw new CancelInputException();
@@ -466,6 +465,24 @@ public class MainManager {
                 case 5 -> {
                     try {
                         this.editCourseOutlineGrades(outline);
+                    } catch (CancelInputException ignored) {
+                    }
+                }
+
+                // Course description
+                case 6 -> {
+
+                    editCourseDescription(outline.getCourse());
+                }
+                // Course credits
+                case 7 -> {
+                    editNumberOfCredits(outline.getCourse());
+                }
+
+                // course knowledge block
+                case 8 -> {
+                    try{
+                        editKnowledgeBlock(outline.getCourse());
                     } catch (CancelInputException ignored) {
                     }
                 }

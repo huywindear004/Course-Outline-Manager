@@ -59,7 +59,7 @@ public class ProcessString {
         ArrayList<String> parts = ProcessString.splitStringToParts(text, maxLength - 2 - indent * indentSpace);
         ArrayList<String> res = new ArrayList<>();
         for (String part : parts) {
-            int remainLength = maxLength - 2 - part.length() - indentString.length();
+            int remainLength = Math.max(0, maxLength - 2 - part.length() - indentString.length());
             res.add("|" + indentString + part + " ".repeat(remainLength) + "|");
         }
         return stringConcat(res);
