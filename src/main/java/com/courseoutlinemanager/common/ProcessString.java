@@ -90,8 +90,8 @@ public class ProcessString {
 
     public static String printTable(String startText, String midText, String endText, int indent) {
         return printTable(startText, midText, endText, indent, getWidth(), getIndentSpace());
-    }
-
+    }// làm cái 4 tham số nữa à
+    
     public static String toPascalCase(String text) {
         if (text == null || text.isEmpty())
             return "";

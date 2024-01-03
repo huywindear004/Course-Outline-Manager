@@ -8,6 +8,7 @@ public class Assessment {
 	private AssessmentTypes assessingType = AssessmentTypes.NULL;
 	private AssessmentMethods assessingMethod = AssessmentMethods.NULL;
 
+
 	public Assessment(String type, String method, double weight) {
 		this.setAssessingType(type);
 		this.setAssessingMethod(method);

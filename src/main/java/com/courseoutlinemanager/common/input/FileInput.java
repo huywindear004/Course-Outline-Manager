@@ -44,7 +44,8 @@ public class FileInput {
                     Course tempCourse = cM.getCourse(newCourse);
                     System.out.println("Found the existed course. Auto change " + newCourse + " to " + tempCourse);
                     newCourse = tempCourse;
-                } catch (NotFoundException ignored) {}
+                } catch (NotFoundException ignored) {
+                }
             } else if (ProcessString.equalsByAlphabet(temp[0], "CourseName")) {
                 newCourse.setCourseName(temp[1].trim());
             } else if (ProcessString.equalsByAlphabet(temp[0], "KnowledgeBlock")) {
@@ -53,9 +54,10 @@ public class FileInput {
                 newCourse.setCourseCredits(Integer.parseInt(temp[1].trim()));
             } else if (ProcessString.equalsByAlphabet(temp[0], "Description")) {
                 newCourse.setCourseDescription(temp[1].trim());
-            } else if (ProcessString.equalsByAlphabet(temp[0], "PrerequisiteCourse")
-                    || ProcessString.equalsByAlphabet(temp[0], "previousCourse")) {
-                // typeOfRequirement will store the type of requirements(previousCourse, PrerequisiteCourse, ...)
+            } else if (ProcessString.equalsByAlphabet(temp[0], "PrerequisiteCourses")
+                    || ProcessString.equalsByAlphabet(temp[0], "previousCourses")) {
+                // typeOfRequirement will store the type of requirements(previousCourse,
+                // PrerequisiteCourse, ...)
                 String typeOfRequirements = temp[0];
                 // temp[] would contains courseStrings
                 temp = temp[1].split("[,;]+");
@@ -63,7 +65,7 @@ public class FileInput {
                 for (String courseString : temp) {
                     // split courseString to get courseCode and courseName
                     String[] nameAndCode = courseString.trim().split("[()_-]+");
-                    //tempCourse is the course that is gonna be added to requirement
+                    // tempCourse is the course that is gonna be added to requirement
                     Course tempCourse = new Course(nameAndCode[1], nameAndCode[0]);
 
                     boolean isAddableCourse = false;
@@ -91,13 +93,11 @@ public class FileInput {
             } else
                 throw new WrongFormatException("The input format of " + input.getName() + " is wrong.");
         }
-        
-        if(!cM.containsCourse(newCourse))
+
+        if (!cM.containsCourse(newCourse))
             cM.addCourse(newCourse);
         return newCourse;
     }
-
-    
 
     public static void main(String[] args) throws FileNotFoundException, NotFoundException {
         CourseManager cM = new CourseManager();
@@ -116,8 +116,7 @@ public class FileInput {
         System.out.println();
         System.out.println();
 
-
-        for(Course i : cM.getCourseList()){
+        for (Course i : cM.getCourseList()) {
             System.out.println(i.toString());
         }
     }

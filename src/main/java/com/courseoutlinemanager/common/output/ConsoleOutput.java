@@ -40,16 +40,16 @@ public class ConsoleOutput {
                 continue;
             }
             for (Course i : requirement.getCourseList()) {
-                System.out.println(printLine(i.toString(),3));
+                System.out.println(printLine(i.toString(), 3));
             }
         }
         System.out.println(printLabel("", "="));
     }
 
     public static void printLecturer(Lecturer lecturer) {
-        System.out.println(printLabel("COURSE INFORMATION", "="));
-        System.out.println(printLine("1. Course Name: " + lecturer.getName(), 1));
-        System.out.println(printLine("2. Course Code: " + lecturer.getId(), 1));
+        System.out.println(printLabel("LECTURER INFORMATION", "="));
+        System.out.println(printLine("1. Lecturer Name: " + lecturer.getName(), 1));
+        System.out.println(printLine("2. Lecturer Code: " + lecturer.getId(), 1));
         System.out.println(printLabel("", "="));
     }
 
@@ -58,24 +58,25 @@ public class ConsoleOutput {
         System.out.println(printLabel("---------------", " "));
         printLecturer(courseOutline.getCompiler());
         printCourse(courseOutline.getCourse());
-        System.out.println(printLine("Subject objectives:", 1));
+        System.out.println(printLine("7. Subject objectives:", 1));
         for (String i : courseOutline.getCourseObjectiveList()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("Subject outcome standards: ", 1));
+        System.out.println(printLine("8. Subject outcome standards: ", 1));
         for (String i : courseOutline.getLearningOutcomeList()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("Subject content:", 1));
+        System.out.println(printLine("9. Subject content:", 1));
         for (String i : courseOutline.getCourseContent()) {
             System.out.println(printLine("- " + i, 2));
         }
-        System.out.println(printLine("Student assessment: ", 1));
+        System.out.println(printLine("10. Student assessment: ", 1));
         System.out.println(printTable("Assessing type", "Assessing method", "Weight", 2));
         for (Assessment i : courseOutline.getGradeList()) {
             System.out.println(
                     printTable(i.getAssessingType().toString(), i.getAssessingMethod().toString(),
                             String.valueOf(i.getWeight()), 3));
+            printLine(i.getContent(), 3);
         }
         System.out.println(printLabel("", "="));
 
@@ -146,11 +147,13 @@ public class ConsoleOutput {
                 "Read custom input data.",
                 "Edit information of a course outline.",
                 "Find course.",
-                "Find all courses which this course is part of it's requirements.",
+                "Find all courses which this course is part of their requirements.",
                 "Sort course outline list.",
                 "Find the course outlines of a lecturer by Id.",
                 "Export course outline.",
-                "Show statistic on the number of course outline by its number of credits"
+                "Show statistics on the number of outlines according to the number of credits.",
+                "Create lecturer",
+                "Create course"
         };
         printChoiceMenu("MAIN MENU", text);
     }
@@ -163,18 +166,19 @@ public class ConsoleOutput {
         printChoiceMenu(message, text);
     }
 
-    public static void printEducation() {
+    public static void optionToExportMenu() {
         String[] text = {
-                "FormalEducation",
-                "TransferEducation"
+                "Lecturer",
+                "Course OutLine Manager",
         };
-        printChoiceMenu("", text);
+        printChoiceMenu("EXPORT COURSE OUTLINE", text);
     }
 
     public static void printExportMenu() {
         String[] text = {
                 "Export 1 outline to console.",
-                "Export all outline to .txt file."
+                "Export all outlines to console.",
+                "Export all outlines to .txt file."
         };
         printChoiceMenu("EXPORT COURSE OUTLINE", text);
     }
@@ -184,7 +188,7 @@ public class ConsoleOutput {
                 "Course Objectives.",
                 "Learning outcomes.",
                 "Course content.",
-                "Previous courses.",
+                "Requirements.",
                 "Grades."
         };
         printChoiceMenu("EDIT " + outline.toString() + "'s outline", menu);
@@ -255,4 +259,13 @@ public class ConsoleOutput {
         return tempRes.doubleValue();
     }
 
+    public static void printOutlinesOfLecturerMenu(Lecturer lect) {
+        ArrayList<CourseOutline> outlineList = lect.getCourseOutlineList();
+        System.out.println(printLabel(lect + "'s outline list", "="));
+        for (int i = 0; i < outlineList.size(); i++) {
+            System.out.println(printLine((i + 1) + ". " + outlineList.get(i), 0));
+        }
+        System.out.println(printLine("0. Exit.", 0));
+        System.out.println(printLabel("", "="));
+    }
 }

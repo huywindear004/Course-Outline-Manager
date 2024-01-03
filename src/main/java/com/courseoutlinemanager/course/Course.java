@@ -12,7 +12,6 @@ import com.courseoutlinemanager.course.knowledgeblock.*;
 import com.courseoutlinemanager.educationalsystem.*;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Course {
 	private static int courseCodeCount = 1;
@@ -103,8 +102,8 @@ public class Course {
 		return this.courseOutlineList;
 	}
 
-	public void addCourseOutline(CourseOutline outline) throws AlreadyExistException {
-
+	public void addCourseOutline(CourseOutline outline) {
+		this.courseOutlineList.add(outline);
 	}
 
 
@@ -176,16 +175,9 @@ public class Course {
 	}
 	
 	
-
-
-	
-	public Course findCourseHasRequirementCode(String codeCourse) {
-		for (CourseCondition i : this.requirementList) {
-			return i.findCourseById(codeCourse);
-		}
-		return null;
+	public boolean containsCourseInRequirementList(String typeOfRequirement, Course course) throws NotFoundException {
+		return this.getRequirement(typeOfRequirement).contains(course);
 	}
-	
 
 
 

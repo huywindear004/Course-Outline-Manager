@@ -38,6 +38,7 @@ public class CourseOutline {
 	}
 
 	public CourseOutline(Course course, Lecturer compiler) {
+		this();
 		this.course = course;
 		this.compiler = compiler;
 	}
@@ -102,7 +103,7 @@ public class CourseOutline {
 	 *         {@code 1} if {@code gradeList.size()} {@code ==} {@code MIN_GRADES}.
 	 */
 	public int hasEnoughGrades() {
-		int size = this.gradeList.size();
+		int size = this.gradeList.size();  
 		if (size < MIN_GRADES)
 			return -1;
 		if (size < MAX_GRADES)
@@ -110,9 +111,9 @@ public class CourseOutline {
 		return 1;
 	}
 
-	private void addGrade(Assessment a) throws OutOfCapacityException {
+	public void addGrade(Assessment a) throws OutOfCapacityException {
 		if (this.hasEnoughGrades() == 1)
-			throw new OutOfCapacityException("The number of " + this.toString() + "'s outline is enough.");
+			throw new OutOfCapacityException("The grades number of " + this.toString() + "'s outline is enough.");
 		double currTotalWeight = 0;
 		for (Assessment i : this.gradeList)
 			currTotalWeight += i.getWeight();
@@ -144,12 +145,7 @@ public class CourseOutline {
 	}
 
 	public void removeGrade(int position) {
-		if (position >= 1 && position <= gradeList.size() + 1) {
-			gradeList.remove(position);
-			System.out.println("Grade at position " + position + " removed.");
-		} else {
-			System.out.println("Invalid position.");
-		}
+		this.gradeList.remove(position);
 	}
 
 	public Assessment getGrade(int pos) {

@@ -94,14 +94,14 @@ public abstract class CourseCondition {
         return this.courseList.contains(course);
     }
     
-    public Course findCourseById(String courseId) {
-        for (Course course : this.courseList) {
-            if (course.getCourseCode().equals(courseId)) {
-                return course;
-            }
-        }
-        return null; 
-    }
+    // public Course findCourseById(String courseId) {
+    //     for (Course course : this.courseList) {
+    //         if (course.getCourseCode().equals(courseId)) {
+    //             return course;
+    //         }
+    //     }
+    //     return null; 
+    // }
 
     public ArrayList<Course> getCourseList() {
         return this.courseList;
