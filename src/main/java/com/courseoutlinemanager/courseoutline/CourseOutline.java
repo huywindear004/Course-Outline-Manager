@@ -37,12 +37,8 @@ public class CourseOutline {
 		this.gradeList = new ArrayList<>();
 	}
 
-	public CourseOutline(Course course, EducationalSystem e) {
-		this.course = course;
-		this.educationalSystem = e;
-	}
-
 	public CourseOutline(Course course, Lecturer compiler) {
+		this();
 		this.course = course;
 		this.compiler = compiler;
 	}
@@ -50,6 +46,14 @@ public class CourseOutline {
 	public CourseOutline(Course course, Lecturer compiler, EducationalSystem e) {
 		this(course, compiler);
 		this.educationalSystem = e;
+	}
+
+	public static int getMinGradesNum() {
+		return MIN_GRADES;
+	}
+
+	public static int getMaxGradesNum() {
+		return MAX_GRADES;
 	}
 
 	public Course getCourse() {
@@ -72,20 +76,8 @@ public class CourseOutline {
 		return this.compiler;
 	}
 
-	public ArrayList<Assessment> getGradeList() {
-		return this.gradeList;
-	}
-
 	public EducationalSystem getEducationalSystem() {
 		return this.educationalSystem;
-	}
-
-	public void setEducationalSystem(EducationalSystem e) {
-		this.educationalSystem = e;
-	}
-
-	public boolean hasEnoughGrades() {
-		return this.gradeList.size() >= MIN_GRADES && this.gradeList.size() <= MAX_GRADES;
 	}
 
 	public void setCourseObjectiveList(ArrayList<String> objectives) {
@@ -98,6 +90,37 @@ public class CourseOutline {
 
 	public void setCourseContent(ArrayList<String> content) {
 		this.courseContent = content;
+	}
+
+	public ArrayList<Assessment> getGradeList() {
+		return this.gradeList;
+	}
+
+	/**
+	 * @return {@code -1} if {@code gradeList.size()} {@code <} {@code MIN_GRADES}.
+	 *         {@code 0} if {@code gradeList.size()} in range {@code MIN_GRADES} ->
+	 *         {@code MAX_GRADES}.
+	 *         {@code 1} if {@code gradeList.size()} {@code ==} {@code MIN_GRADES}.
+	 */
+	public int hasEnoughGrades() {
+		int size = this.gradeList.size();  
+		if (size < MIN_GRADES)
+			return -1;
+		if (size < MAX_GRADES)
+			return 0;
+		return 1;
+	}
+
+	public void addGrade(Assessment a) throws OutOfCapacityException {
+		if (this.hasEnoughGrades() == 1)
+			throw new OutOfCapacityException("The grades number of " + this.toString() + "'s outline is enough.");
+		double currTotalWeight = 0;
+		for (Assessment i : this.gradeList)
+			currTotalWeight += i.getWeight();
+		if (Double.compare(currTotalWeight + a.getWeight(), TOTAL_WEIGHT) > 0)
+			throw new OutOfCapacityException("The total weight of all grades should be less than 100% "
+					+ String.format("[%.2f%% / 100%%]", (currTotalWeight + a.getWeight()) * 100.0));
+		this.gradeList.add(a);
 	}
 
 	/**
@@ -114,25 +137,29 @@ public class CourseOutline {
 	 *                                weight would be greater than 100%
 	 */
 	public void addGrade(String type, String method, double weight) throws OutOfCapacityException {
-		if (this.gradeList.size() >= MAX_GRADES)
-			throw new OutOfCapacityException("The number of grades is enough.");
-		double currTotalWeight = 0;
-		for (Assessment i : this.gradeList)
-			currTotalWeight += i.getWeight();
-		if (Double.compare(currTotalWeight, TOTAL_WEIGHT) > 0
-				|| Double.compare(currTotalWeight + weight, TOTAL_WEIGHT) > 0)
-			throw new OutOfCapacityException("The total weight should be less than 100%");
-		this.gradeList.add(new Assessment(type, method, weight));
+		this.addGrade(new Assessment(type, method, weight));
 	}
 
 	public void addGrade(String type, String method, double weight, String content) throws OutOfCapacityException {
-		this.addGrade(type, method, weight);
+		this.addGrade(new Assessment(type, method, weight, content));
 	}
 
 	public void removeGrade(int position) {
-		if (position >= 0 && position < this.gradeList.size()) {
-			this.gradeList.remove(position);
-		}
+		this.gradeList.remove(position);
+	}
+
+	public Assessment getGrade(int pos) {
+		return gradeList.get(pos);
+	}
+
+	public void setGradeWeight(Assessment a, double val) throws OutOfCapacityException {
+		double currTotalWeight = this.gradeList.stream()
+				.mapToDouble(Assessment::getWeight)
+				.sum();
+		if (Double.compare(currTotalWeight - a.getWeight() + val, TOTAL_WEIGHT) > 0)
+			throw new OutOfCapacityException("The total weight of all grades should be less than 100% "
+					+ String.format("[%.2f%% / 100%%]", (currTotalWeight + a.getWeight()) * 100.0));
+		a.setWeight(val);
 	}
 
 	@Override

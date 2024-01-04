@@ -1,5 +1,7 @@
 package com.courseoutlinemanager.course.knowledgeblock;
 
+
+
 public enum KnowledgeBlock {
 	NULL,
 
@@ -12,4 +14,6 @@ public enum KnowledgeBlock {
 	public String toString() {
 		return super.toString().replaceAll("_", " ");
 	}
+
+
 }

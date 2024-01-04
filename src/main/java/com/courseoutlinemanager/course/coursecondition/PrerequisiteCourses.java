@@ -3,6 +3,15 @@ package com.courseoutlinemanager.course.coursecondition;
 public class PrerequisiteCourses extends CourseCondition {
     private static final int MAX_COURSES = 3;
 
+    private String name;
+
+
+    public PrerequisiteCourses() {
+
+    }
+    public PrerequisiteCourses(String name) {
+        this.name = name;
+    }
 
     @Override
     public int getMAX_COURSES() {
@@ -11,6 +20,6 @@ public class PrerequisiteCourses extends CourseCondition {
     
     @Override
     public String getTypeName() {
-        return "Prerequisite Course";
+        return "Prerequisite Courses";
     }
 }

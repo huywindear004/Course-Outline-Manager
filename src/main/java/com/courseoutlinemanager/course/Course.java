@@ -2,6 +2,7 @@ package com.courseoutlinemanager.course;
 
 import com.courseoutlinemanager.common.ProcessString;
 import com.courseoutlinemanager.common.customexception.AlreadyExistException;
+import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
 import com.courseoutlinemanager.course.coursecondition.PrerequisiteCourses;
@@ -11,7 +12,6 @@ import com.courseoutlinemanager.course.knowledgeblock.*;
 import com.courseoutlinemanager.educationalsystem.*;
 
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Course {
 	private static int courseCodeCount = 1;
@@ -22,7 +22,7 @@ public class Course {
 
 	private String courseDescription;
 
-	private int courseCredits;
+	private double courseCredits;
 
 	private KnowledgeBlock knowledgeBlock = KnowledgeBlock.NULL;
 
@@ -42,6 +42,7 @@ public class Course {
 	 * This constructor is for user input operation
 	 */
 	public Course(String courseName) {
+		this();
 		this.courseName = courseName;
 		this.courseCode = String.format("COUR%03d", courseCodeCount++);
 	}
@@ -80,11 +81,11 @@ public class Course {
 		this.courseDescription = courseDescription;
 	}
 
-	public int getCourseCredits() {
+	public double getCourseCredits() {
 		return courseCredits;
 	}
 
-	public void setCourseCredits(int courseCredits) {
+	public void setCourseCredits(double courseCredits) {
 		this.courseCredits = courseCredits;
 	}
 
@@ -96,23 +97,21 @@ public class Course {
 		this.knowledgeBlock = knowledgeBlock;
 	}
 
-	// =============================================================COURSE
-	// OUTLINE=============================================================
+	// =============================================================COURSE OUTLINE=============================================================
 	public ArrayList<CourseOutline> getCourseOutlineList() {
 		return this.courseOutlineList;
 	}
 
-	public void addCourseOutline(CourseOutline outline) throws AlreadyExistException {
-
+	public void addCourseOutline(CourseOutline outline) {
+		this.courseOutlineList.add(outline);
 	}
 
 
-	//kiểm tra xem môn này đã có đề cương của hệ đào tạo đã chọn chưa
-	public boolean isAvailForOutline(String type) {
+	public boolean isAvailForOutline(String typeOfSystem) {
 		EducationalSystem eSys = null;
 		// Get type of educational system to which outline in this list belongs
 		for (CourseOutline outline : this.courseOutlineList) {
-			if (ProcessString.equalsByAlphabet(type, outline.getEducationalSystem().getTypeName()))
+			if (ProcessString.equalsByAlphabet(typeOfSystem, outline.getEducationalSystem().getTypeName()))
 				eSys = outline.getEducationalSystem();
 		}
 		if (eSys == null)
@@ -125,6 +124,10 @@ public class Course {
 		return count < eSys.getMaxOutlinePerCourse(); // hàm này sẽ trả về true nếu kiểu hệ đào tạo có thể thêm đề cương
 	}
 
+	public void removeCourseOutline(CourseOutline toDelete){
+		this.courseOutlineList.remove(toDelete);
+	}
+
 	// =============================================================REQUIREMENTS=============================================================
 	public ArrayList<CourseCondition> getRequirementList() {
 		return requirementList;
@@ -133,15 +136,16 @@ public class Course {
 	/**
 	 * Return the required course list
 	 */
-	public ArrayList<CourseCondition> getRequirements(String typeOfRequirement) {
-		return this.requirementList.stream()
-				.filter(e -> ProcessString.equalsByAlphabet(e.getTypeName(), typeOfRequirement))
-				.collect(Collectors.toCollection(ArrayList::new));
+	public CourseCondition getRequirement(String typeOfRequirement) throws NotFoundException {
+		for(CourseCondition i : this.requirementList)
+			if(ProcessString.equalsByAlphabet(typeOfRequirement,i.getTypeName()))
+				return i;
+		throw new NotFoundException("Couldn't find " + typeOfRequirement);
 	}
 
-	public void setRequirementList(ArrayList<CourseCondition> requirements) {
-		this.requirementList = requirements;
-	}
+	// public void setRequirementList(ArrayList<CourseCondition> requirements) {
+	// 	this.requirementList = requirements;
+	// }
 
 	/**
 	 * Add course to list.
@@ -149,25 +153,38 @@ public class Course {
 	 * @param typeOfRequirement
 	 *                          Type of the requirement that the course needs to be
 	 *                          added to
-	 * @param course
+	 * @param toBeAdded
 	 *                          Course that needs to be added
 	 * @throws OutOfCapacityException
 	 *                                If the requirement is enough of elements.
 	 * @throws AlreadyExistException
 	 *                                If there is the equivalent course in the
 	 *                                requirement.
+	 * @throws NotFoundException 
+	 * If the type of requirement is not found
 	 */
-	public void addCourseRequirements(String typeOfRequirement, Course course)
-			throws OutOfCapacityException {
-		for (CourseCondition i : this.requirementList)
-			if (ProcessString.equalsByAlphabet(i.getTypeName(), typeOfRequirement))
-				i.addCourse(course);
+	public void addCourseToRequirementList(String typeOfRequirement, Course toBeAdded)
+			throws OutOfCapacityException, AlreadyExistException, NotFoundException {
+		if(toBeAdded.equals(this))
+			throw new AlreadyExistException("Duplicate course code " + this + " " + toBeAdded);
+		this.getRequirement(typeOfRequirement).addCourse(toBeAdded);
 	}
 
 
-	public void showRequirementList() {
-		
+	public boolean removeCourseOfRequirementList(String typeOfRequirement, Course toDelete) 
+			throws AlreadyExistException, NotFoundException {
+		if(toDelete.equals(this))
+			throw new AlreadyExistException("Duplicate course code " + this + " " + toDelete);
+		return this.getRequirement(typeOfRequirement).removeCourse(toDelete);
 	}
+	
+	
+	public boolean containsCourseInRequirementList(String typeOfRequirement, Course course) throws NotFoundException {
+		return this.getRequirement(typeOfRequirement).contains(course);
+	}
+
+
+
 
 	/**
 	 * Return true if courseCode and courseName is the same. False if vice versa.

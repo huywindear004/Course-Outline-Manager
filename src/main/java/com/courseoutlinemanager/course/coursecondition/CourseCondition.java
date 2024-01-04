@@ -1,5 +1,6 @@
 package com.courseoutlinemanager.course.coursecondition;
 
+import com.courseoutlinemanager.common.customexception.AlreadyExistException;
 import com.courseoutlinemanager.common.customexception.NotFoundException;
 import com.courseoutlinemanager.common.customexception.OutOfCapacityException;
 import com.courseoutlinemanager.course.Course;
@@ -31,32 +32,41 @@ public abstract class CourseCondition {
         this.courseList = courses;
     }
 
-    private Course getCourseIfItExist(Course course) throws NotFoundException {
-        for (Course c : courseList) {
-            if (course.equals(c))
-                return c;
-        }
-        throw new NotFoundException();
+    private Course getCourseIfItExist(Course toFind) throws NotFoundException {
+        int index = this.courseList.indexOf(toFind);
+        if (index == -1)
+            throw new NotFoundException("Couldn't find " + toFind.toString());
+        return this.courseList.get(index);
     }
 
     /**
      * Add course to list. If the toBeAddedCourse is already in the requirement,
-     * then
-     * assign the existedCourse to the toBeAddedCourse.
+     * then assign the existedCourse to the toBeAddedCourse.
      * 
      * @param course
      *               Given course
      * @throws OutOfCapacityException
      *                                If the list is enough of elements.
      */
-    public void addCourse(Course course) throws OutOfCapacityException {
+    public void addCourse(Course toBeAddedCourse) throws OutOfCapacityException, AlreadyExistException {
+        if (this.size() >= this.getMAX_COURSES())
+            throw new OutOfCapacityException(
+                    String.format("The number of courses of %s is enough!", this.getTypeName()));
+
         try {
-            course = this.getCourseIfItExist(course);
-        } catch (NotFoundException ignored) {
+            toBeAddedCourse = this.getCourseIfItExist(toBeAddedCourse);
+
+            // if it already existed - throw AlreadyExistException
+            throw new AlreadyExistException(toBeAddedCourse.toString() + " already existed in " + this.getTypeName());
+
+            // if it didn't exist - add it to the list
+        } catch (NotFoundException e) {
+            this.courseList.add(toBeAddedCourse);
         }
-        if (this.courseList.size() >= this.getMAX_COURSES())
-            throw new OutOfCapacityException(String.format("The number of courses of %s is enough!", getTypeName()));
-        this.courseList.add(course);
+    }
+
+    public boolean removeCourse(Course toBeRemovedCourse) {
+        return this.courseList.remove(toBeRemovedCourse);
     }
 
     /**
@@ -68,9 +78,6 @@ public abstract class CourseCondition {
      * @return
      *         True if the given course is present
      */
-    public boolean removeCourse(Course course) {
-        return this.courseList.remove(course);
-    }
 
     public int size() {
         return this.courseList.size();
@@ -88,7 +95,20 @@ public abstract class CourseCondition {
         return this.courseList.contains(course);
     }
 
+    // public Course findCourseById(String courseId) {
+    // for (Course course : this.courseList) {
+    // if (course.getCourseCode().equals(courseId)) {
+    // return course;
+    // }
+    // }
+    // return null;
+    // }
+
     public ArrayList<Course> getCourseList() {
         return this.courseList;
+    }
+
+    public boolean isEmpty() {
+        return this.courseList.isEmpty();
     }
 }

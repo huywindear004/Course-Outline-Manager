@@ -3,80 +3,104 @@ package com.courseoutlinemanager.common.output;
 import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
 
+import com.courseoutlinemanager.assessment.Assessment;
 import com.courseoutlinemanager.course.Course;
 import com.courseoutlinemanager.course.coursecondition.CourseCondition;
 import com.courseoutlinemanager.courseoutline.CourseOutline;
 import static com.courseoutlinemanager.common.ProcessString.*;
 
 public class FileOutput {
-        private static final int WIDTH = 100;
-        private static final int INDENT_SPACE = 4;
 
         public static void writeOutLine(CourseOutline courseOutline, String filePath) throws IOException {
                 try (BufferedWriter writer = new BufferedWriter(new FileWriter(filePath))) {
-                        writer.write(printLabel("Open University", " ", WIDTH));
-                        writer.write(printLabel("---------------", " ", WIDTH));
-                        writer.write(printLabel("Course Outline", "=", WIDTH));
-                        writer.write(printLine("\nI.General information", 0, WIDTH, INDENT_SPACE));
-                        writer.write(printLine("\n1.Course Name: " + courseOutline.getCourse().getCourseName(),
-                                        1, WIDTH, INDENT_SPACE));
-                        writer.write(printLine("\n2.Course Code: " + courseOutline.getCourse().getCourseCode(),
-                                        1, WIDTH, INDENT_SPACE));
-                        writer.write(
-                                        printLine(
-                                                        "\n3.Belongs to the knowledge/skills block: "
-                                                                        + courseOutline.getCourse().getKnowledgeBlock()
-                                                                                        .toString(),
-                                                        1, WIDTH, INDENT_SPACE));
+                        writer.write(printLabel("Open University", " "));
+                        writer.write("\n");
+                        writer.write(printLabel("---------------", " "));
+                        writer.write("\n");
+                        writer.write(printLabel("Course Outline", "="));
+                        writer.write("\n");
+                        writer.write(printLine("I. General information", 0));
+                        writer.write("\n");
+                        writer.write(printLine("1. Course Name: " + courseOutline.getCourse().getCourseName(), 1));
+                        writer.write("\n");
+                        writer.write(printLine("2. Course Code: " + courseOutline.getCourse().getCourseCode(), 1));
+                        writer.write("\n");
+                        writer.write(printLine("3. Belongs to the knowledge/skills block: "
+                                        + courseOutline.getCourse().getKnowledgeBlock().toString(), 1));
+                        writer.write("\n");
+
+                        writer.write(printLine("4. Number of credits: " + courseOutline.getCourse().getCourseCredits(),
+                                        1));
+                        writer.write("\n");
+                        writer.write(printLine("5. In charge of the topic: ", 1));
+                        writer.write("\n");
+                        writer.write(printLine("a. Lecturer: " + courseOutline.getCompiler().getName(), 2));
+                        writer.write("\n");
+                        writer.write(printLine("b. Lecturer Id: " + courseOutline.getCompiler().getId(), 2));
+                        writer.write("\n");
+                        writer.write(printLine("II. Information about the subject", 0));
+                        writer.write("\n");
                         writer.write(printLine(
-                                        "\n4.Number of credits: " + courseOutline.getCourse().getCourseCredits(), 1,
-                                        WIDTH, INDENT_SPACE));
-                        writer.write(printLine("\n5.In charge of the topic: ", 1, WIDTH, INDENT_SPACE));
-                        writer.write(
-                                        printLine("\na.Lecturer " + courseOutline.getCompiler().getName(), 2, WIDTH,
-                                                        INDENT_SPACE));
-                        writer.write(
-                                        printLine("\nb.Id " + courseOutline.getCompiler().getId(), 2, WIDTH,
-                                                        INDENT_SPACE));
-                        writer.write(printLine("\nII.Information about the subject", 0, WIDTH, INDENT_SPACE));
-                        writer.write(
-                                        printLine("\n1.Subject description: "
-                                                        + courseOutline.getCourse().getCourseDescription(), 1, WIDTH,
-                                                        INDENT_SPACE));
-                        writer.write(printLine("\n2. Requirements:", 1, WIDTH, INDENT_SPACE));
-                        writer.write(
-                                        printLine("\n1.Subject description: "
-                                                        + courseOutline.getCourse().getCourseDescription(), 1, WIDTH,
-                                                        INDENT_SPACE));
+                                        "1. Education system: " + courseOutline.getEducationalSystem().getTypeName(),
+                                        1));
+                        writer.write("\n");
+
+                        writer.write(printLine(
+                                        "2. Subject description: " + courseOutline.getCourse().getCourseDescription(),
+                                        1));
+                        writer.write("\n");
+
+                        writer.write(printLine("3. Requirements:", 1));
+                        writer.write("\n");
 
                         for (CourseCondition requirements : courseOutline.getCourse().getRequirementList()) {
-                                writer.write(
-                                                printLine("- " + requirements.getTypeName() + ":", 2, WIDTH,
-                                                                INDENT_SPACE));
+                                writer.write(printLine("- " + requirements.getTypeName() + ":", 2));
+                                writer.write("\n");
+
                                 for (Course i : requirements.getCourseList()) {
-                                        writer.write(printTable(i.getCourseName(), i.getCourseCode(), 3, WIDTH,
-                                                        INDENT_SPACE));
+                                        writer.write(printLine("" + i.toString(), 4));
+                                        writer.write("\n");
                                 }
                         }
-                        writer.write(printLine("\n3.Subject objectives: ", 1, WIDTH, INDENT_SPACE));
-
+                        writer.write(printLine("4. Subject objectives: ", 1));
+                        writer.write("\n");
                         for (String i : courseOutline.getCourseObjectiveList()) {
-                                writer.write(printLine("-" + i, 2, WIDTH, INDENT_SPACE));
+                                writer.write(printLine("- " + i, 2));
+                                writer.write("\n");
 
                         }
-                        writer.write(printLine("4.Subject outcome standards: ", 1, WIDTH, INDENT_SPACE));
-
+                        writer.write(printLine("5. Subject outcome standards: ", 1));
+                        writer.write("\n");
                         for (String i : courseOutline.getLearningOutcomeList()) {
-                                writer.write(printLine("-" + i, 2, WIDTH, INDENT_SPACE));
+                                writer.write(printLine("- " + i, 2));
+                                writer.write("\n");
                         }
-                        writer.write(printLine("5.Subject content: ", 1, WIDTH, INDENT_SPACE));
+                        writer.write(printLine("6. Subject content: ", 1));
+                        writer.write("\n");
                         for (String i : courseOutline.getCourseContent()) {
-                                writer.write(printLine("-" + i, 2, WIDTH, INDENT_SPACE));
+                                writer.write(printLine("- " + i, 2));
+                                writer.write("\n");
                         }
-                        writer.write(printLine("5.Subject evaluation: ", 1, WIDTH, INDENT_SPACE));
+                        writer.write(printLine("7. Subject evaluation: ", 1));
+                        writer.write("\n");
+                        for (Assessment i : courseOutline.getGradeList()) {
+                                writer.write(printLine("- " + i.toString(), 2));
+                                writer.write("\n");
+                        }
+                        writer.write(printLabel("", "="));
+                }
+        }
 
-                        writer.write(printLabel("", "=", WIDTH));
+        public static void writeOutlineList(ArrayList<CourseOutline> outlineList, String outputPath) {
+                for (CourseOutline i : outlineList) {
+                        try {
+                                writeOutLine(i, outputPath + "/" + i.getCourse() + "_"
+                                                + i.getEducationalSystem().getTypeName() + ".txt");
+                        } catch (IOException e) {
+                                System.out.println("Error: " + e.getMessage());
+                        }
                 }
         }
 

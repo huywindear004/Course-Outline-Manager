@@ -1,9 +1,10 @@
 package com.courseoutlinemanager.common;
 
+import static com.courseoutlinemanager.common.output.ConsoleOutput.*;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.List;
 
 public class ProcessString {
     /**
@@ -41,9 +42,16 @@ public class ProcessString {
     }
 
     public static String printLabel(String label, String character, int maxLength) {
-        int halfLineLength = (maxLength - label.length()) / 2;
+        int length = label.length();
+        int halfLineLength = (maxLength - length) / 2;
         String horizontialLine = character.repeat(halfLineLength);
+        if (length % 2 != 0)
+            return horizontialLine + label + horizontialLine + character;
         return horizontialLine + label + horizontialLine;
+    }
+
+    public static String printLabel(String label, String character) {
+        return printLabel(label, character, getWidth());
     }
 
     public static String printLine(String text, int indent, int maxLength, int indentSpace) {
@@ -51,10 +59,14 @@ public class ProcessString {
         ArrayList<String> parts = ProcessString.splitStringToParts(text, maxLength - 2 - indent * indentSpace);
         ArrayList<String> res = new ArrayList<>();
         for (String part : parts) {
-            int remainLength = maxLength - 2 - part.length() - indentString.length();
+            int remainLength = Math.max(0, maxLength - 2 - part.length() - indentString.length());
             res.add("|" + indentString + part + " ".repeat(remainLength) + "|");
         }
         return stringConcat(res);
+    }
+
+    public static String printLine(String text, int indent) {
+        return printLine(text, indent, getWidth(), getIndentSpace());
     }
 
     public static String printTable(String startText, String endText, int indent, int maxLength, int indentSpace) {
@@ -63,43 +75,41 @@ public class ProcessString {
         return "|" + indentString + startText + " ".repeat(remainLength) + endText + "|";
     }
 
-    public static String printTable(String startText, String middleText, String endText, int indent, int maxLength,
+    public static String printTable(String startText, String midText, String endText, int indent, int maxLength,
             int indentSpace) {
         String indentString = " ".repeat(indentSpace * indent);
-        int spaceBetween = (maxLength - 2 - startText.length() - middleText.length() - endText.length()
+        int spaceBetween = (maxLength - 2 - startText.length() - midText.length() - endText.length()
                 - indentString.length()) / 2;
-        return "|" + indentString + startText + " ".repeat(spaceBetween) + middleText + " ".repeat(spaceBetween)
+        return "|" + indentString + startText + " ".repeat(spaceBetween) + midText + " ".repeat(spaceBetween)
                 + endText + "|";
     }
 
-    public static String toPascalCase(String text) {
-        if (text == null || text.isEmpty())
-            return "";
-        String[] words = text.trim().split("[\\s_-]+");
-        StringBuilder res = new StringBuilder();
-        for (String word : words) {
-            res.append(Character.toUpperCase(word.charAt(0)));
-            res.append(word.substring(1).toLowerCase());
-        }
-        return res.toString();
+    public static String printTable(String startText, String endText, int indent) {
+        return printTable(startText, endText, indent, getWidth(), getIndentSpace());
     }
+
+    public static String printTable(String startText, String midText, String endText, int indent) {
+        return printTable(startText, midText, endText, indent, getWidth(), getIndentSpace());
+    }
+
+    
 
     public static String stringConcat(ArrayList<String> strings) {
         StringBuilder temp = new StringBuilder();
-        if(strings.size() == 1)
+        if (strings.size() == 1)
             return strings.get(0);
         else
             for (String line : strings)
                 temp.append(line + "\n");
-        return temp.toString();
+        return temp.toString().trim();
     }
-    
+
     public static ArrayList<String> getFileNames(String path, String... excludedString) {
         File folder = new File(path);
         ArrayList<String> excludedStrings = new ArrayList<>();
         ArrayList<String> res = new ArrayList<>();
         excludedStrings.addAll(Arrays.asList(excludedString));
-        String[] temp = folder.list(); 
+        String[] temp = folder.list();
         for (String i : temp) {
             boolean isExcluded = false;
             for (String exclStr : excludedStrings) {
@@ -108,9 +118,30 @@ public class ProcessString {
                     break;
                 }
             }
-            if(!isExcluded)
+            if (!isExcluded)
                 res.add(i);
         }
         return res;
+    }
+
+    public static String orderedList(ArrayList<String> texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < texts.size(); i++)
+            res.append(printLine((i + 1) + ". " + texts.get(i), indents)).append("\n");
+        return res.toString();
+    }
+
+    public static String orderedList(String[] texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (int i = 0; i < texts.length; i++)
+            res.append(printLine((i + 1) + ". " + texts[i], indents)).append("\n");
+        return res.toString();
+    }
+
+    public static String unorderedList(ArrayList<String> texts, int indents) {
+        StringBuilder res = new StringBuilder();
+        for (String line : texts)
+            res.append(printLine("- " + line, indents)).append("\n");
+        return res.toString();
     }
 }

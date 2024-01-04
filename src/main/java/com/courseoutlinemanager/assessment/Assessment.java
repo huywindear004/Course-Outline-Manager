@@ -8,6 +8,7 @@ public class Assessment {
 	private AssessmentTypes assessingType = AssessmentTypes.NULL;
 	private AssessmentMethods assessingMethod = AssessmentMethods.NULL;
 
+
 	public Assessment(String type, String method, double weight) {
 		this.setAssessingType(type);
 		this.setAssessingMethod(method);
@@ -19,6 +20,13 @@ public class Assessment {
 		this.setAssessingMethod(method);
 		this.weight = weight;
 		this.content = content;
+	}
+	
+
+	@Override
+	public String toString() {
+		return String.format("[Type: %s] [Method: %s] [Weight: %.1f%%] [Content: %s]", assessingType, assessingMethod,
+				weight * 100.0, content);  
 	}
 
 	public double getWeight() {
@@ -54,6 +62,11 @@ public class Assessment {
 				this.assessingType = i;
 		}
 	}
+
+	public void setAssessingType(AssessmentTypes type) {
+		this.assessingType = type;
+	}
+
 	//Check method when setting
 	public void setAssessingMethod(String method) {
 		for (AssessmentMethods i : AssessmentMethods.values()) {
@@ -62,4 +75,7 @@ public class Assessment {
 		}
 	}
 
+	public void setAssessingMethod(AssessmentMethods method) {
+		this.assessingMethod = method;
+	}
 }
